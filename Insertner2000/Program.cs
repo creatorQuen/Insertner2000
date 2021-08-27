@@ -20,7 +20,8 @@ namespace Insertner2000
 
             stopWatch.Stop();
             Console.WriteLine();
-            Console.WriteLine($"Total time:{TimeSpan.FromMilliseconds(stopWatch.ElapsedMilliseconds).Seconds}");
+            Console.WriteLine($"Total time in minutes:{TimeSpan.FromMilliseconds(stopWatch.ElapsedMilliseconds).Minutes}");
+            Console.WriteLine($"      time in seconds:{TimeSpan.FromMilliseconds(stopWatch.ElapsedMilliseconds).Seconds}");
             Console.WriteLine();
             Console.WriteLine("Done. Press any key to exit.");
             Console.ReadKey();
