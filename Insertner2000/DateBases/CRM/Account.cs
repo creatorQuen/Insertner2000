@@ -59,15 +59,20 @@ namespace Insertner2000.DateBases.CRM
                 var type = (int)TransactionType.Deposit;
                 var ammount = 0;
                 var currencyType = 0;
+                Dictionary<CurrencyType, int> dictionary = new Dictionary<CurrencyType, int>();
+                foreach (var l in list)
+                {
+                    dictionary.Add(l, ammount);
+                }
 
                 DataSet dataSet = new DataSet();
                 DataTable table;
                 table = dataSet.Tables.Add("MockTransaction");
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("AccountId", typeof(int));
-                table.Columns.Add("Amount", typeof(decimal));
                 table.Columns.Add("Currency", typeof(int));
                 table.Columns.Add("TransactionType", typeof(int));
+                table.Columns.Add("Amount", typeof(decimal));
                 table.Columns.Add("Date", typeof(DateTime));
 
                 for (int intRow = 1; intRow <= 5; intRow++)
@@ -75,9 +80,9 @@ namespace Insertner2000.DateBases.CRM
                     table.Rows.Add(
                         GLOBALCOUNT,
                         accountId,
-                        ammount = GetQuantityOperation((TransactionType)type),
                         list[random.Next(list.Count)],
                         type = GetTransactionType(ammount, list),
+                        ammount = GetQuantityOperation((TransactionType)type),
                          ((DateTime)(time.AddMilliseconds(intRow))).ToString(_dateFormat)
                        );
                     GLOBALCOUNT++;
@@ -107,7 +112,7 @@ namespace Insertner2000.DateBases.CRM
 
         private static int GetTransactionType(int ammount, List<CurrencyType> list)
         {
-            if (0 <= ammount)
+            if (0 < ammount)
             { 
                 return random.Next(2, 4);
             }
