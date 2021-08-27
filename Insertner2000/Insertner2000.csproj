@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="ConfigurationForTables.cs" />
     <Compile Include="DateBases\CRM\Account.cs" />
+    <Compile Include="DateBases\TStore\TransactionCurrencyRate.cs" />
     <Compile Include="DateBases\TStore\TStore.cs" />
     <Compile Include="Entity\CityList.cs" />
     <Compile Include="Entity\CurrencyType.cs" />

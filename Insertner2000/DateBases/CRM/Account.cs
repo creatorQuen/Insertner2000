@@ -12,6 +12,11 @@ namespace Insertner2000.DateBases.CRM
         private static string _transactionTable = "[TStore].[dbo].[Transaction]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
         private static int GLOBALCOUNT = 1;
+        private static int _transactionCount = 10;
+        private static int _dayPearYear = 365;
+        private static int _dayPearHalfYear = 180;
+        private static int _dayPearTwoWeek = 14;
+        private static string _dateTimeTransaction;
         private static Random random = new Random();
 
         public void CreateAcounts(int countStart, int countEnd, string connectionForLeadAccount, string connectionForTransaction)
@@ -19,9 +24,6 @@ namespace Insertner2000.DateBases.CRM
             using (SqlConnection _connection = new SqlConnection(connectionForLeadAccount))
             {
                 Console.WriteLine("Starting..");
-
-                //Random random = new Random();
-
                 var timeCreated = DateTime.Now;
                 DateTime timeClosed = new DateTime();
 
@@ -55,7 +57,7 @@ namespace Insertner2000.DateBases.CRM
         {
             using (SqlConnection _connectionForTransaction = new SqlConnection(connectionForTransaction))
             {
-                var time = DateTime.Now;
+                var time = DateTime.Now.AddDays(random.Next(-120, -14));
                 var type = (int)TransactionType.Deposit;
                 var ammount = 0;
                 var currencyType = 0;
@@ -75,17 +77,45 @@ namespace Insertner2000.DateBases.CRM
                 table.Columns.Add("Amount", typeof(decimal));
                 table.Columns.Add("Date", typeof(DateTime));
 
-                for (int intRow = 1; intRow <= 5; intRow++)
+                for (int intRow = 1; intRow <= _transactionCount; intRow++)
                 {
-                    table.Rows.Add(
-                        GLOBALCOUNT,
-                        accountId,
-                        list[random.Next(list.Count)],
-                        type = GetTransactionType(ammount, list),
-                        ammount = GetQuantityOperation((TransactionType)type),
-                         ((DateTime)(time.AddMilliseconds(intRow))).ToString(_dateFormat)
-                       );
-                    GLOBALCOUNT++;
+                    var randomCurrency = list[random.Next(list.Count)];
+                    var randomAmount = 0;
+
+                    AddRowsIntoTable(accountId, time, out type, dictionary, table, randomCurrency, out randomAmount);
+                    
+                    switch (type)
+                    {
+                        case (int)TransactionType.Deposit: dictionary[randomCurrency] += randomAmount; break;
+                        case (int)TransactionType.Withdraw: dictionary[randomCurrency] -= randomAmount; break;
+                        case (int)TransactionType.Transfer:
+
+                            var dictionaryClone = new Dictionary<CurrencyType, int>();
+
+                            foreach (var dic in dictionary)
+                            {
+                                dictionaryClone.Add(dic.Key, dic.Value);
+                            }
+
+                            dictionaryClone.Remove(randomCurrency);
+                            var payee = random.Next(1, dictionaryClone.Count);
+                            dictionary[(CurrencyType)payee] += randomAmount;
+                            dictionary[randomCurrency] -= randomAmount;
+
+                            table.Rows.Add(
+                               GLOBALCOUNT,
+                               accountId,
+                               (CurrencyType)payee,
+                               type,
+                               -randomAmount,
+                                _dateTimeTransaction
+                              );
+
+                            GLOBALCOUNT++;
+
+                            break;
+                        default: throw new Exception("This type has not transaction in enum TransactionType");
+                    }
                 }
 
                 SqlBulkCopy bulkCopy = new SqlBulkCopy(_connectionForTransaction);
@@ -97,6 +127,19 @@ namespace Insertner2000.DateBases.CRM
             }
         }
 
+        private static void AddRowsIntoTable(int accountId, DateTime time, out int type, Dictionary<CurrencyType, int> dictionary, DataTable table, CurrencyType randomCurrency, out int randomAmount)
+        {
+            table.Rows.Add(
+                GLOBALCOUNT,
+                accountId,
+                randomCurrency,
+                type = GetTransactionType(dictionary),
+                randomAmount = GetQuantityOperation((TransactionType)type),
+                 _dateTimeTransaction = ((DateTime)(time.AddDays(random.Next(-_dayPearHalfYear, -_dayPearTwoWeek)))).ToString(_dateFormat)
+               );
+            GLOBALCOUNT++;
+        }
+
         private static int GetQuantityOperation(TransactionType type)
         {
             switch (type)
@@ -105,16 +148,23 @@ namespace Insertner2000.DateBases.CRM
                 case TransactionType.Withdraw : return random.Next(-1000, 0); 
                 case TransactionType.Transfer : return random.Next(100, 10000);
                 default: throw new Exception("This type has not transaction in enum TransactionType");
-
             }
-            //return random.Next(100, 10000);
         }
 
-        private static int GetTransactionType(int ammount, List<CurrencyType> list)
+        private static int GetTransactionType(Dictionary<CurrencyType, int> dictionary)
         {
-            if (0 < ammount)
-            { 
-                return random.Next(2, 4);
+
+            foreach (var d in dictionary.Values)
+            {
+                if (1 < dictionary.Count && 0 < d)
+                {
+                    return random.Next(1, 4);
+                }
+
+                if (0 < d)
+                {
+                    return random.Next(1, 3);
+                }
             }
 
             return (int)TransactionType.Deposit;
@@ -161,8 +211,7 @@ namespace Insertner2000.DateBases.CRM
 
         private static void GenerateRandomCurrency(int currenyType, DateTime timeCreated, DataTable table, int rowNuber)
         {
-            var timeClosed = DateTime.Now;
-            var time = timeClosed.AddDays(120).ToString(_dateFormat);
+            var timeClosed = DateTime.Now.AddDays(random.Next(-_dayPearTwoWeek, 0)).ToString(_dateFormat); //AddDays(120).ToString(_dateFormat);
             var IsAccountDeleted = false;
 
             if (random.Next(0, 2) == 1)
@@ -174,8 +223,8 @@ namespace Insertner2000.DateBases.CRM
             rowNuber,
             rowNuber,
             currenyType,
-            ((DateTime)(timeCreated.AddMilliseconds(rowNuber))).ToString(_dateFormat),
-            IsAccountDeleted == true ? time : null,
+            ((DateTime)(timeCreated.AddDays(random.Next(-_dayPearYear, -_dayPearHalfYear)))).ToString(_dateFormat),
+            IsAccountDeleted == true ? timeClosed : null,
             IsAccountDeleted);
         }
     }

@@ -25,18 +25,7 @@ namespace Insertner2000
         public void AccountsDataBase()
         {
             Account listAccounts = new Account();
-            //listAccounts.CreateAcounts(1, 100, 1, _conStringCRM);
-            //listAccounts.CreateAcounts(101, 150, 2, _conStringCRM);
-            //listAccounts.CreateAcounts(151, 200, 3, _conStringCRM);
-            //listAccounts.CreateAcounts(201, 300, 4, _conStringCRM);
-            listAccounts.CreateAcounts(1, 500, _conStringCRM, _conStringTStore);
-        }
-
-        public void TransactionsDataBase()
-        {
-            TStore listTransactions = new TStore();
-            //listTransactions.CreateTStores(1, 100, _conStringTStore);
-            //listTransactions.CreateTStores(1, 100, _conStringTStore);
+            listAccounts.CreateAcounts(1, 1000000, _conStringCRM, _conStringTStore);
         }
     }
 }

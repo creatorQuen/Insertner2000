@@ -34,11 +34,6 @@ namespace Insertner2000.DateBases.TStore
 
                 Console.WriteLine("Adding data to datatable..");
 
-                //using (SqlConnection _sss = new SqlConnection(connectionForTransaction))
-                //{
-
-                //}
-
                 for (int intRow = countStart; intRow <= countEnd; intRow++)
                 {
                     table.Rows.Add(

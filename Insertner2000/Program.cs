@@ -12,11 +12,9 @@ namespace Insertner2000
 
             ConfigurationForTables tables = new ConfigurationForTables();
 
-            //tables.CitiesDataBase();
-            //tables.LeadsDataBase();
+            tables.CitiesDataBase();
+            tables.LeadsDataBase();
             tables.AccountsDataBase();
-
-            //tables.TransactionsDataBase();
 
             stopWatch.Stop();
             Console.WriteLine();
@@ -25,7 +23,6 @@ namespace Insertner2000
             Console.WriteLine();
             Console.WriteLine("Done. Press any key to exit.");
             Console.ReadKey();
-
         }
     }
 }
