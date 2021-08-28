@@ -7,11 +7,12 @@ namespace Insertner2000
     {
         public const string _conStringCRM = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LeadA; Persist Security Info=False;";
         public const string _conStringTStore = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TStore; Persist Security Info=False;";
+        public const int _countAccounts = 500;
 
         public void LeadsDataBase()
         {
             Lead listLeads = new Lead();
-            listLeads.CreateLeads(1, 1000000, _conStringCRM);
+            listLeads.CreateLeads(1, _countAccounts, _conStringCRM);
         }
 
         public void CitiesDataBase()
@@ -23,7 +24,7 @@ namespace Insertner2000
         public void AccountsDataBase()
         {
             Account listAccounts = new Account();
-            listAccounts.CreateAcounts(1, 1000000, _conStringCRM, _conStringTStore);
+            listAccounts.CreateAcounts(1, _countAccounts, _conStringCRM, _conStringTStore);
         }
     }
 }

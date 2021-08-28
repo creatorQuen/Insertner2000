@@ -51,13 +51,13 @@ namespace Insertner2000.DateBases.CRM
             }
         }
 
-        private void AddRowsInTransactionForAccount(string connectionForTransaction, int accountId, List<CurrencyType> list)
+        private void AddRowsInTransactionForAccount(string connectionForTransaction, int accountId, int currencyType, List<CurrencyType> list)
         {
             using (SqlConnection _connectionForTransaction = new SqlConnection(connectionForTransaction))
             {
-                var time = DateTime.Now.AddDays(random.Next(-120, -14));
+                var time = DateTime.Now.AddDays(random.Next(-_dayPearHalfYear, -_dayPearTwoWeek));
                 var ammount = 0;
-                var currencyType = 0;
+
                 var dictionary = new Dictionary<CurrencyType, int>();
 
                 foreach (var l in list)
@@ -75,16 +75,16 @@ namespace Insertner2000.DateBases.CRM
                 table.Columns.Add("TransactionType", typeof(decimal)); //TRType
                 table.Columns.Add("Date", typeof(DateTime));
 
+                var randomCurrency = currencyType;
                 for (int intRow = 1; intRow <= _transactionCount; intRow++)
                 {
-                    var randomCurrency = list[random.Next(list.Count)];
 
                     AddRowsInTableTransaction(accountId, time, out var type, dictionary, table, randomCurrency, out var randomAmount);
 
                     switch (type)
                     {
-                        case (int)TransactionType.Deposit: dictionary[randomCurrency] += randomAmount; break;
-                        case (int)TransactionType.Withdraw: dictionary[randomCurrency] -= randomAmount; break;
+                        case (int)TransactionType.Deposit: dictionary[(CurrencyType)randomCurrency] += randomAmount; break;
+                        case (int)TransactionType.Withdraw: dictionary[(CurrencyType)randomCurrency] -= randomAmount; break;
                         case (int)TransactionType.Transfer:
 
                             var dictionaryClone = new Dictionary<CurrencyType, int>();
@@ -94,10 +94,10 @@ namespace Insertner2000.DateBases.CRM
                                 dictionaryClone.Add(dic.Key, dic.Value);
                             }
 
-                            dictionaryClone.Remove(randomCurrency);
+                            dictionaryClone.Remove((CurrencyType)randomCurrency);
                             var payee = random.Next(1, dictionaryClone.Count);
                             dictionary[(CurrencyType)payee] += randomAmount;
-                            dictionary[randomCurrency] -= randomAmount;
+                            dictionary[(CurrencyType)randomCurrency] -= randomAmount;
 
                             table.Rows.Add(
                                GLOBALCOUNT,
@@ -123,7 +123,7 @@ namespace Insertner2000.DateBases.CRM
             }
         }
 
-        private void AddRowsInTableTransaction(int accountId, DateTime time, out int type, Dictionary<CurrencyType, int> dictionary, DataTable table, CurrencyType randomCurrency, out int randomAmount)
+        private void AddRowsInTableTransaction(int accountId, DateTime time, out int type, Dictionary<CurrencyType, int> dictionary, DataTable table, int randomCurrency, out int randomAmount)
         {
             type = GetTransactionType(dictionary);
             table.Rows.Add(
@@ -184,7 +184,7 @@ namespace Insertner2000.DateBases.CRM
 
                 CreateMultipleCurrency(random, timeCreated, table, intRow, currencyCount, crntList, listCurrency);
 
-                AddRowsInTransactionForAccount(connectionForTransaction, intRow, crntList);
+                AddRowsInTransactionForAccount(connectionForTransaction, intRow, currencyCount, crntList);
             }
         }
 
