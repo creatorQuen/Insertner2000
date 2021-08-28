@@ -1,7 +1,5 @@
 ﻿using Insertner2000.DateBases.CRM;
-using Insertner2000.DateBases.TStore;
 using Insertner2000.Tables;
-using System.Data.SqlClient;
 
 namespace Insertner2000
 {

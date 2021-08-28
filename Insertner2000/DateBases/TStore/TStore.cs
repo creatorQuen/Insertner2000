@@ -1,5 +1,4 @@
-﻿using Insertner2000.Entity;
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Insertner2000.Entity
+﻿namespace Insertner2000.Entity
 {
     public enum Patronomic_Begin
     {
