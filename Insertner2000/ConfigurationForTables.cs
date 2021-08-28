@@ -13,7 +13,7 @@ namespace Insertner2000
         public void LeadsDataBase()
         {
             Lead listLeads = new Lead();
-            listLeads.CreateLeads(1, 1000000, _conStringCRM);
+            listLeads.CreateLeads(1, 500, _conStringCRM);
         }
 
         public void CitiesDataBase()
@@ -25,7 +25,7 @@ namespace Insertner2000
         public void AccountsDataBase()
         {
             Account listAccounts = new Account();
-            listAccounts.CreateAcounts(1, 1000000, _conStringCRM, _conStringTStore);
+            listAccounts.CreateAccounts(1, 500, _conStringCRM, _conStringTStore);
         }
     }
 }
