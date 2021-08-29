@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace Insertner2000.DateBases.TStore
 {
@@ -13,7 +14,7 @@ namespace Insertner2000.DateBases.TStore
         private const int _countEnd = 10;
         private readonly Random _random = new Random();
 
-        public void CreateTStores(int accountId, string connectionForTransaction)
+        public void CreateTStores(Dictionary<int, CurrencyType> dictionary, string connectionForTransaction)
         {
             using (SqlConnection _connection = new SqlConnection(connectionForTransaction))
             {
@@ -30,17 +31,19 @@ namespace Insertner2000.DateBases.TStore
                 table.Columns.Add("Date", typeof(DateTime));
 
                 var ammount = 0;
-                var transactionType = GetTransactionTypeByAmount(ammount);
-                var currency = GetCurrencyByAccountId(accountId);
-                var dateTimeTransaction = DateTime.Now.AddMilliseconds(ammount).ToString(_dateFormat);
-
                 for (var intRow = 0; intRow <= _countEnd; intRow++)
                 {
+                    // var listId = Enumerable.ToList(dictionary.Keys);
+                    var transactionType = GetTransactionTypeByAmount(ammount);
+                    var currency = GetCurrencyByDictionaryKeys(dictionary);
+                    var dateTimeTransaction = DateTime.Now.AddMilliseconds(ammount).ToString(_dateFormat);
+                    var key = dictionary.FirstOrDefault(x => x.Value == currency).Key;
+
                     table.Rows.Add(
                         intRow,
-                        accountId,
-                        ammount,
-                        currency,
+                        key,//dictionary.key
+                        _random.Next(1,100),
+                        dictionary[key],//dictionary.value
                         transactionType,
                         dateTimeTransaction
                         );
@@ -68,18 +71,25 @@ namespace Insertner2000.DateBases.TStore
             return TransactionType.Deposit;
         }
 
-        private int GetCurrencyByAccountId(int id)
+        private CurrencyType GetCurrencyByDictionaryKeys(Dictionary<int,CurrencyType> dictionary)
         {
-            return id;
+            var listId = Enumerable.ToList(dictionary.Keys);
+            var index = _random.Next(listId.Count);
+            var currency = dictionary.FirstOrDefault(x => x.Key == index).Value;
+            return currency;
         }
+        // 3, RUB
+        // 4, usd
+        // 5, eur
+
 
         private int GetRandomAmountByTransactionType(TransactionType type)
         {
             switch (type)
             {
-                case TransactionType.Deposit: return _random.Next(100,10000);
-                case TransactionType.Withdraw: return _random.Next(-100,-10);
-                case TransactionType.Transfer: return _random.Next(100,1000);
+                case TransactionType.Deposit: return _random.Next(100, 10000);
+                case TransactionType.Withdraw: return _random.Next(-100, -10);
+                case TransactionType.Transfer: return _random.Next(100, 1000);
                 default: throw new Exception("this type doesn't have in TransactionType");
             }
         }

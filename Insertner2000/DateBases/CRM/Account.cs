@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Insertner2000.DateBases.TStore;
 
 namespace Insertner2000.DateBases.CRM
 {
@@ -15,12 +16,13 @@ namespace Insertner2000.DateBases.CRM
         private const int _dayPearYear = 365;
         private const int _dayPearHalfYear = 180;
 
-        public void CreateAccounts(int countStart, int countEnd, string connectionForLeadAccount)
+        public void CreateAccounts(int countStart, int countEnd, string connectionForLeadAccount,string connectionForTransaction)
         {
             using (SqlConnection _connection = new SqlConnection(connectionForLeadAccount))
             {
                 Console.WriteLine("Starting..");
 
+                var id = countStart;
                 var dataSet = new DataSet();
                 var table = dataSet.Tables.Add("ttmpData");
 
@@ -35,29 +37,27 @@ namespace Insertner2000.DateBases.CRM
 
                 Console.WriteLine("Adding data to dataTable..");
 
-                for (var intRow = countStart; intRow <= countEnd; intRow++)
+                for (var LeadId = countStart; LeadId <= countEnd; LeadId++)
                 {
-
                     var listCurrency = new List<CurrencyType> { CurrencyType.RUB, CurrencyType.USD, CurrencyType.EUR, CurrencyType.JPY };
                     var listCurrencyAccount = new List<CurrencyType>();
-                   // Enum.GetValues(_random.Next(listCurrency.Count + 1));
-                   // var currencyRandom = (CurrencyType)array.GetValue(_random.Next(array.Length));
-
                     var array = Enum.GetValues(typeof(CurrencyType));
+                    var dictionary = new Dictionary<int, CurrencyType>();
 
                     var isDeleted = GetIsDeletedRandom();
                     var closed = GetClosedDataTimeByIsDeleted(isDeleted);
                     var currencyCount = (int)array.GetValue(_random.Next(array.Length));
-                    var timeCreated = DateTime.Now.AddDays(_random.Next(-_dayPearYear, -_dayPearHalfYear)).ToString(_dateFormat);
+                    var timeCreated = DateTime.Now.AddDays(_random.Next(-_dayPearYear * 3 / 2, -_dayPearYear)).ToString(_dateFormat);
 
                     table.Rows.Add(
-                        intRow,
-                        intRow,
+                        id++,
+                        LeadId,
                         CurrencyType.RUB,
                         timeCreated,
                         closed,
-                        isDeleted);
-
+                        isDeleted
+                        );
+                    dictionary.Add(id, CurrencyType.RUB);
                     listCurrencyAccount.Add(CurrencyType.RUB);
 
                     for (int i = 0; i < currencyCount; i++)
@@ -67,21 +67,28 @@ namespace Insertner2000.DateBases.CRM
                             var currencyRandom = _random.Next(1, listCurrency.Count + 1);
                             if (!listCurrencyAccount.Contains((CurrencyType)currencyRandom))
                             {
+                                var isDeletedInCurrecyList = GetIsDeletedRandom();
+                                var closedInCurrecyList = GetClosedDataTimeByIsDeleted(isDeletedInCurrecyList);
+                                timeCreated = DateTime.Now.AddDays(_random.Next(-_dayPearYear, -_dayPearHalfYear)).ToString(_dateFormat);
+
                                 table.Rows.Add(
-                                    intRow,
-                                    intRow,
+                                    id++,
+                                    LeadId,
                                     (CurrencyType)currencyRandom,
                                     timeCreated,
-                                    closed,
-                                    isDeleted);
-
+                                    closedInCurrecyList,
+                                    isDeletedInCurrecyList
+                                    );
+                                dictionary.Add(id, (CurrencyType)currencyRandom);
                                 listCurrencyAccount.Add((CurrencyType)currencyRandom);
                                 listCurrency.Remove((CurrencyType)currencyRandom);
                             }
                         }
                     }
-                }
 
+                    var store = new TStore.TStore();
+                    store.CreateTStores(dictionary, connectionForTransaction);
+                }
                 Console.WriteLine("Open dataBase..");
 
                 var bulkCopy = new SqlBulkCopy(_connection);

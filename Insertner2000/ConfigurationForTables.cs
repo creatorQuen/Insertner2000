@@ -30,15 +30,12 @@ namespace Insertner2000
             //listAccounts.CreateAcounts(101, 150, 2, _conStringCRM);
             //listAccounts.CreateAcounts(151, 200, 3, _conStringCRM);
             //listAccounts.CreateAcounts(201, 300, 4, _conStringCRM);
-            listAccounts.CreateAccounts(1, 500, _conStringCrm);
-            for (int i = 0; i < 500; i++)
-            {
-                listTransactions.CreateTStores(i, _conStringTStore);
-            }
+            listAccounts.CreateAccounts(1, 500, _conStringCrm,_conStringTStore);
         }
 
         public void TransactionsDataBase()
         {
+            //listTransactions.CreateTStores(i, _conStringTStore);
             //listTransactions.CreateTStores(1, 100, _conStringTStore);
         }
     }
