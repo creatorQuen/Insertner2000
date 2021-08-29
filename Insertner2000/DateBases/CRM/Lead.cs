@@ -18,7 +18,7 @@ namespace Insertner2000.Tables
 
                 Random random = new Random();
 
-                int lengthRandomString = 4;
+                int lengthRandomString = 6;
                 int countCity = Enum.GetNames(typeof(CityList)).Length;
                 int countFirstName = Enum.GetNames(typeof(FirstName)).Length;
                 int countLastName = Enum.GetNames(typeof(LastName)).Length;
@@ -62,7 +62,7 @@ namespace Insertner2000.Tables
                     var emailDomain = (Email_Domain)(random.Next(1, countEmail));
                     string emailString = ((FirstName)tmpFirstName).ToString() + ((LastName)tmpLastName).ToString() + randomString + phoneStart + "@" + emailEnd + "." + emailDomain;
 
-                    int nuberForBirthDay = random.Next(1, 10000);
+                    int nuberForBirthDay = random.Next(-5000, 8200);
                     int roleId = random.Next(1, 4);
                     int cityId = random.Next(1, countCity + 1);
                     int boolId = random.Next(0, 2);

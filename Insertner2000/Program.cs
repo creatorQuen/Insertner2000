@@ -12,9 +12,9 @@ namespace Insertner2000
 
             ConfigurationForTables tables = new ConfigurationForTables();
 
-            tables.CitiesDataBase();
+            //tables.CitiesDataBase();
             tables.LeadsDataBase();
-            tables.AccountsDataBase();
+            //tables.AccountsDataBase();
 
             stopWatch.Stop();
             Console.WriteLine();
