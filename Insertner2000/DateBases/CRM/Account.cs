@@ -50,7 +50,7 @@ namespace Insertner2000.DateBases.CRM
                     var timeCreated = DateTime.Now.AddDays(_random.Next(-_dayPearYear * 3 / 2, -_dayPearYear)).ToString(_dateFormat);
 
                     table.Rows.Add(
-                        id++,
+                        id,
                         LeadId,
                         CurrencyType.RUB,
                         timeCreated,
@@ -85,6 +85,7 @@ namespace Insertner2000.DateBases.CRM
                             }
                         }
                     }
+                    id++;
 
                     var store = new TStore.TStore();
                     store.CreateTStores(dictionary, connectionForTransaction);

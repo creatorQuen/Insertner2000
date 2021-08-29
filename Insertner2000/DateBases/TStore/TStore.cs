@@ -33,20 +33,23 @@ namespace Insertner2000.DateBases.TStore
                 var ammount = 0;
                 for (var intRow = 0; intRow <= _countEnd; intRow++)
                 {
+
                     // var listId = Enumerable.ToList(dictionary.Keys);
                     var transactionType = GetTransactionTypeByAmount(ammount);
                     var currency = GetCurrencyByDictionaryKeys(dictionary);
                     var dateTimeTransaction = DateTime.Now.AddMilliseconds(ammount).ToString(_dateFormat);
                     var key = dictionary.FirstOrDefault(x => x.Value == currency).Key;
+                    ammount = GetRandomAmountByTransactionType(transactionType);
 
                     table.Rows.Add(
                         intRow,
                         key,//dictionary.key
-                        _random.Next(1,100),
+                        ammount,
                         dictionary[key],//dictionary.value
                         transactionType,
                         dateTimeTransaction
                         );
+                    ammount = _random.Next(-50, 100);
                 }
 
                 var bulkCopy = new SqlBulkCopy(_connection);
@@ -73,10 +76,25 @@ namespace Insertner2000.DateBases.TStore
 
         private CurrencyType GetCurrencyByDictionaryKeys(Dictionary<int,CurrencyType> dictionary)
         {
-            var listId = Enumerable.ToList(dictionary.Keys);
-            var index = _random.Next(listId.Count);
-            var currency = dictionary.FirstOrDefault(x => x.Key == index).Value;
+            //var listId = Enumerable.ToList(dictionary.Keys);
+            //var index = _random.Next(listId.Count);
+            //var currency = dictionary.FirstOrDefault(x => x.Key == index).Value;
+            //return currency;
+
+            //CurrencyType one = dictionary[0];
+            //CurrencyType last = dictionary[dictionary.Count - 1];
+
+            int i = 0;
+            var dicClone = new Dictionary<int, CurrencyType>();
+            foreach (var d in dictionary)
+            {
+                dicClone.Add(i++, d.Value);
+            }
+            var index = _random.Next(dicClone.Count);
+            var currency = dicClone.FirstOrDefault(x => x.Key == index).Value;
             return currency;
+
+
         }
         // 3, RUB
         // 4, usd
