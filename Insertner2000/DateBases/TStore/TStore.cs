@@ -1,5 +1,6 @@
 ﻿using Insertner2000.Entity;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -9,7 +10,8 @@ namespace Insertner2000.DateBases.TStore
     {
         private static string _transactionTable = "[TStore].[dbo].[Transaction]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
-        private const int countEnd = 10;
+        private const int _countEnd = 10;
+        private readonly Random _random = new Random();
 
         public void CreateTStores(int accountId, string connectionForTransaction)
         {
@@ -17,7 +19,6 @@ namespace Insertner2000.DateBases.TStore
             {
                 //Console.WriteLine("Starting..");
 
-                var random = new Random();
                 var dataSet = new DataSet();
                 var table = dataSet.Tables.Add("MockTransaction");
 
@@ -29,11 +30,11 @@ namespace Insertner2000.DateBases.TStore
                 table.Columns.Add("Date", typeof(DateTime));
 
                 var ammount = 0;
-                var currency = GetCurrencyByAccountId(accountId);
                 var transactionType = GetTransactionTypeByAmount(ammount);
+                var currency = GetCurrencyByAccountId(accountId);
                 var dateTimeTransaction = DateTime.Now.AddMilliseconds(ammount).ToString(_dateFormat);
 
-                for (var intRow = 0; intRow <= countEnd; intRow++)
+                for (var intRow = 0; intRow <= _countEnd; intRow++)
                 {
                     table.Rows.Add(
                         intRow,
@@ -53,20 +54,34 @@ namespace Insertner2000.DateBases.TStore
             }
         }
 
-        private int GetTransactionTypeByAmount(int amount)
+        private TransactionType GetTransactionTypeByAmount(int amount)
         {
-            if (amount != 0)
+            //foreach (var dic in Dictionary.Value)
+            //{
+            //if( 1 < Dictionary.Count && 0 < dic)
+            if (0 < amount)
             {
-                Random random = new Random();
-                return random.Next(2, 4);
+                return (TransactionType)_random.Next(2, 4);
             }
+            //}
 
-            return (int)TransactionType.Deposit;
+            return TransactionType.Deposit;
         }
 
         private int GetCurrencyByAccountId(int id)
         {
             return id;
+        }
+
+        private int GetRandomAmountByTransactionType(TransactionType type)
+        {
+            switch (type)
+            {
+                case TransactionType.Deposit: return _random.Next(100,10000);
+                case TransactionType.Withdraw: return _random.Next(-100,-10);
+                case TransactionType.Transfer: return _random.Next(100,1000);
+                default: throw new Exception("this type doesn't have in TransactionType");
+            }
         }
     }
 }

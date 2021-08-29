@@ -11,6 +11,9 @@ namespace Insertner2000.DateBases.CRM
         private string _accountTable = "[LeadA].[dbo].[Account]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
         private Random _random = new Random();
+        private const int _dayPearTwoWeek = 14;
+        private const int _dayPearYear = 365;
+        private const int _dayPearHalfYear = 180;
 
         public void CreateAccounts(int countStart, int countEnd, string connectionForLeadAccount)
         {
@@ -37,11 +40,15 @@ namespace Insertner2000.DateBases.CRM
 
                     var listCurrency = new List<CurrencyType> { CurrencyType.RUB, CurrencyType.USD, CurrencyType.EUR, CurrencyType.JPY };
                     var listCurrencyAccount = new List<CurrencyType>();
+                   // Enum.GetValues(_random.Next(listCurrency.Count + 1));
+                   // var currencyRandom = (CurrencyType)array.GetValue(_random.Next(array.Length));
+
+                    var array = Enum.GetValues(typeof(CurrencyType));
 
                     var isDeleted = GetIsDeletedRandom();
-                    var currencyCount = _random.Next(1, 5);
-                    var timeCreated = DateTime.Now.AddMilliseconds(intRow).ToString(_dateFormat);
                     var closed = GetClosedDataTimeByIsDeleted(isDeleted);
+                    var currencyCount = (int)array.GetValue(_random.Next(array.Length));
+                    var timeCreated = DateTime.Now.AddDays(_random.Next(-_dayPearYear, -_dayPearHalfYear)).ToString(_dateFormat);
 
                     table.Rows.Add(
                         intRow,
@@ -86,9 +93,9 @@ namespace Insertner2000.DateBases.CRM
             }
         }
 
-        private DateTime GetClosedDataTimeByIsDeleted(bool isDeleted)
+        private string GetClosedDataTimeByIsDeleted(bool isDeleted)
         {
-            return DateTime.Now;
+            return isDeleted ? DateTime.Now.AddDays(_random.Next(-_dayPearTwoWeek, 0)).ToString(_dateFormat) : null;
         }
 
         private bool GetIsDeletedRandom()
