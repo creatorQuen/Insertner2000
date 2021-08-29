@@ -9,6 +9,8 @@ namespace Insertner2000.Tables
     {
         private string _nameTable = "Lead";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
+        private const int _daysPearTwoYear = 730;
+        private const int _daysPearYear = 365;
 
         public void CreateLeads(int countStart, int countEnd, string connectionString)
         {
@@ -53,6 +55,7 @@ namespace Insertner2000.Tables
                     int tmpLastName = (random.Next(1, countLastName + 1));
 
                     var randomString = GenerateStringNotThreadSafe(lengthRandomString);
+                    var randomCreateDate = ((DateTime)(time.AddDays(random.Next(-_daysPearTwoYear, -_daysPearYear)))).ToString(_dateFormat);
 
                     var phoneStart = random.Next(1, 100001).ToString();
                     var phoneEnd = random.Next(1, 100001).ToString();
@@ -72,7 +75,7 @@ namespace Insertner2000.Tables
                         (FirstName)tmpFirstName,
                         tmpFirstName <= middleFirstNameCount ? $"{(LastName)(tmpLastName)}" + nameof(Name_End.a) : $"{(LastName)(tmpLastName)}",
                         tmpFirstName <= middleFirstNameCount ? $"{(Patronomic_Begin)(random.Next(1, countFirstName + 1))}" + nameof(Name_End.na) : $"{(Patronomic_Begin)(random.Next(1, countFirstName + 1))}" + nameof(Name_End.ich),
-                         ((DateTime)(time.AddMinutes(intRow))).ToString(_dateFormat),
+                        randomCreateDate,
                         emailString,
                         phoneString,
                         $"{randomString + phoneStart}",
