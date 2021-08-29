@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace Insertner2000.DateBases.CRM
 {
@@ -17,7 +18,7 @@ namespace Insertner2000.DateBases.CRM
         private const int _dayPearHalfYear = 180;
         private const int _dayPearTwoWeek = 14;
         private string _dateTimeTransaction;
-        private readonly Random random = new Random();
+        private readonly Random _random = new Random();
 
         public void CreateAccounts(int countStart, int countEnd, string connectionForLeadAccount, string connectionForTransaction)
         {
@@ -39,33 +40,25 @@ namespace Insertner2000.DateBases.CRM
 
                 Console.WriteLine("Adding data to datatable..");
 
-                for (int intRow = countStart; intRow <= countEnd;)
+                for (var intRow = countStart; intRow <= countEnd;)
                 {
-                    var currencyCount = random.Next(1, 5);
-                    var crntList = new List<CurrencyType>();
-                    var listCurrency = new List<CurrencyType>() {
-                        CurrencyType.RUB,
-                        CurrencyType.USD,
-                        CurrencyType.EUR,
-                        CurrencyType.JPY };
-
-                    var timeClosed = DateTime.Now.AddDays(random.Next(-_dayPearTwoWeek, 0)).ToString(_dateFormat);
-                    var isAccountDeleted = random.Next(0, 2) == 1;
+                    var timeClosed = DateTime.Now.AddDays(_random.Next(-_dayPearTwoWeek, 0)).ToString(_dateFormat);
+                    var isAccountDeleted = _random.Next(0, 2) == 1;
 
                     table.Rows.Add(
                         intRow,
                         intRow,
                         (int)CurrencyType.RUB,
-                        timeCreated.AddDays(random.Next(-_dayPearYear, -_dayPearHalfYear)).ToString(_dateFormat),
+                        timeCreated.AddDays(_random.Next(-_dayPearYear, -_dayPearHalfYear)).ToString(_dateFormat),
                         isAccountDeleted ? timeClosed : null,
-                        isAccountDeleted);
+                        isAccountDeleted
+                        );
 
-                    crntList.Add(CurrencyType.RUB);
+                    var dictionary = CreateMultipleCurrency(timeCreated, table, intRow);
 
-                    CreateMultipleCurrency(timeCreated, table, intRow, currencyCount, crntList, listCurrency);
-                    foreach (var currency in crntList)
+                    foreach (var currency in dictionary.Keys.ToList())
                     {
-                        AddRowsInTransactionForAccount(connectionForTransaction, intRow, currency);
+                        AddRowsInTransactionForAccount(connectionForTransaction, intRow, currency, dictionary);
                         intRow++;
                     }
                 }
@@ -80,19 +73,14 @@ namespace Insertner2000.DateBases.CRM
             }
         }
 
-        private void AddRowsInTransactionForAccount(string connectionForTransaction, int accountId, CurrencyType currency)//list
+        private void AddRowsInTransactionForAccount(string connectionForTransaction, int accountId, CurrencyType currency, Dictionary<CurrencyType, int> dictionary)
         {
             using (SqlConnection _connectionForTransaction = new SqlConnection(connectionForTransaction))
             {
-                var time = DateTime.Now.AddDays(random.Next(-120, -14));
-                var type = (int)TransactionType.Deposit;
-                var ammount = 0;
-                var currencyType = 0;
-                var dictionary = new Dictionary<CurrencyType, int> { { currency, ammount } };
-
+                var time = DateTime.Now.AddDays(_random.Next(-_dayPearHalfYear, -_dayPearTwoWeek));
                 var dataSet = new DataSet();
                 var table = dataSet.Tables.Add("MockTransaction");
-                
+
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("AccountId", typeof(int));
                 table.Columns.Add("Amount", typeof(decimal));
@@ -102,14 +90,15 @@ namespace Insertner2000.DateBases.CRM
 
                 for (var intRow = 1; intRow <= _transactionCount; intRow++)
                 {
-                    var randomCurrency = currency;
+                    var type = GetTransactionType(dictionary);
                     var randomAmount = GetQuantityOperation((TransactionType)type);
-                    type = GetTransactionType(dictionary);
+                    _dateTimeTransaction = time.AddDays(_random.Next(-_dayPearHalfYear, -_dayPearTwoWeek))
+                        .ToString(_dateFormat);
 
                     switch (type)
                     {
-                        case (int)TransactionType.Deposit: dictionary[randomCurrency] += randomAmount; break;
-                        case (int)TransactionType.Withdraw: dictionary[randomCurrency] -= randomAmount; break;
+                        case (int)TransactionType.Deposit: dictionary[currency] += randomAmount; break;
+                        case (int)TransactionType.Withdraw: dictionary[currency] -= randomAmount; break;
                         case (int)TransactionType.Transfer:
 
                             var dictionaryClone = new Dictionary<CurrencyType, int>();
@@ -119,20 +108,20 @@ namespace Insertner2000.DateBases.CRM
                                 dictionaryClone.Add(dic.Key, dic.Value);
                             }
 
-                            dictionaryClone.Remove(randomCurrency);
-                            var payee = random.Next(1, dictionaryClone.Count);
+                            dictionaryClone.Remove(currency);
+                            var payee = _random.Next(1, dictionaryClone.Count);
+
                             dictionary[(CurrencyType)payee] += randomAmount;
-                            dictionary[randomCurrency] -= randomAmount;
+                            dictionary[currency] -= randomAmount;
 
                             table.Rows.Add(
                                _globalcount,
-                               accountId,
+                               accountId,// TODO
                                -randomAmount,
                                (CurrencyType)payee,
                                type,
                                 _dateTimeTransaction
                               );
-
                             _globalcount++;
 
                             break;
@@ -143,9 +132,9 @@ namespace Insertner2000.DateBases.CRM
                         _globalcount,
                         accountId,
                         randomAmount,
-                        randomCurrency,
+                        currency,
                         type,
-                        _dateTimeTransaction = time.AddDays(random.Next(-_dayPearHalfYear, -_dayPearTwoWeek)).ToString(_dateFormat)
+                        _dateTimeTransaction
                     );
                     _globalcount++;
                 }
@@ -162,9 +151,9 @@ namespace Insertner2000.DateBases.CRM
         {
             switch (type)
             {
-                case TransactionType.Deposit: return random.Next(100, 10000);
-                case TransactionType.Withdraw: return random.Next(-1000, 0);
-                case TransactionType.Transfer: return random.Next(100, 10000);
+                case TransactionType.Deposit: return _random.Next(100, 10000);
+                case TransactionType.Withdraw: return _random.Next(-1000, 0);
+                case TransactionType.Transfer: return _random.Next(100, 10000);
                 default: throw new Exception("This type has not transaction in enum TransactionType");
             }
         }
@@ -175,43 +164,54 @@ namespace Insertner2000.DateBases.CRM
             {
                 if (1 < dictionary.Count && 0 < d)
                 {
-                    return random.Next(1, 4);
+                    return _random.Next(1, 4);
                 }
 
                 if (0 < d)
                 {
-                    return random.Next(1, 3);
+                    return _random.Next(1, 3);
                 }
             }
 
             return (int)TransactionType.Deposit;
         }
 
-        private void CreateMultipleCurrency(DateTime timeCreated, DataTable table, int intRow, int currencyCount, List<CurrencyType> crntList, List<CurrencyType> listCurrency)
+        private Dictionary<CurrencyType, int> CreateMultipleCurrency(DateTime timeCreated, DataTable table, int intRow)
         {
+            var amount = 0;
+            var dictionary = new Dictionary<CurrencyType, int> { { CurrencyType.RUB, amount } };
+            var currencyCount = _random.Next(1, 5);
+            var listCurrency = new List<CurrencyType>() {
+                CurrencyType.RUB,
+                CurrencyType.USD,
+                CurrencyType.EUR,
+                CurrencyType.JPY };
+
             for (int i = 0; i < currencyCount; i++)
             {
-                if (currencyCount > (int)CurrencyType.RUB)
+                if (dictionary.Count != currencyCount)
                 {
-                    var currencyRandom = random.Next(1, listCurrency.Count + 1);
-                    if (!crntList.Contains((CurrencyType)currencyRandom))
+                    var currencyRandom = _random.Next(1, listCurrency.Count + 1);
+                    if (!dictionary.ContainsKey((CurrencyType)currencyRandom))
                     {
-                        var timeClosed = DateTime.Now.AddDays(random.Next(-_dayPearTwoWeek, 0)).ToString(_dateFormat); //AddDays(120).ToString(_dateFormat);
-                        var IsAccountDeleted = random.Next(0, 2) == 1;
+                        var timeClosed = DateTime.Now.AddDays(_random.Next(-_dayPearTwoWeek, 0)).ToString(_dateFormat);
+                        var IsAccountDeleted = _random.Next(0, 2) == 1;
 
                         table.Rows.Add(
                             intRow,
                             intRow,
                             currencyRandom,
-                            timeCreated.AddDays(random.Next(-_dayPearYear, -_dayPearHalfYear)).ToString(_dateFormat),
+                            timeCreated.AddDays(_random.Next(-_dayPearYear, -_dayPearHalfYear)).ToString(_dateFormat),
                             IsAccountDeleted == true ? timeClosed : null,
                             IsAccountDeleted);
 
-                        crntList.Add((CurrencyType)currencyRandom);
+                        dictionary.Add((CurrencyType)currencyRandom, amount);
                         listCurrency.Remove((CurrencyType)currencyRandom);
                     }
                 }
             }
+
+            return dictionary;
         }
     }
 }
