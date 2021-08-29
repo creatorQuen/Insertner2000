@@ -16,7 +16,7 @@ namespace Insertner2000
             //tables.LeadsDataBase();
             tables.AccountsDataBase();
 
-            //tables.TransactionsDataBase();
+            tables.TransactionsDataBase();
 
             stopWatch.Stop();
             Console.WriteLine();

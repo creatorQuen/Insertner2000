@@ -7,59 +7,66 @@ namespace Insertner2000.DateBases.TStore
 {
     public class TStore
     {
-        private string _nameTable = "[TStore].[dbo].[Transaction]";
+        private static string _transactionTable = "[TStore].[dbo].[Transaction]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
-        public void CreateTStores(int countStart, int countEnd, string connectionForLead, string connectionForTransaction)
+        private const int countEnd = 10;
+
+        public void CreateTStores(int accountId, string connectionForTransaction)
         {
-            using (SqlConnection _connection = new SqlConnection(connectionForLead))
+            using (SqlConnection _connection = new SqlConnection(connectionForTransaction))
             {
-                Console.WriteLine("Starting..");
+                //Console.WriteLine("Starting..");
 
-                Random randomAmount = new Random();
+                var random = new Random();
+                var dataSet = new DataSet();
+                var table = dataSet.Tables.Add("MockTransaction");
 
-                Random randomTransactionType = new Random();
-                var transactionType = 1;
-
-                var time = DateTime.Now;
-
-                DataSet dataSet = new DataSet();
-                Console.WriteLine("Creating datatable..");
-                DataTable table;
-                table = dataSet.Tables.Add("MockTransaction");
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("AccountId", typeof(int));
+                table.Columns.Add("Amount", typeof(decimal));
+                table.Columns.Add("Currency", typeof(int));
                 table.Columns.Add("TransactionType", typeof(int));
                 table.Columns.Add("Date", typeof(DateTime));
-                table.Columns.Add("Amount", typeof(decimal));
 
-                Console.WriteLine("Adding data to datatable..");
+                var ammount = 0;
+                var currency = GetCurrencyByAccountId(accountId);
+                var transactionType = GetTransactionTypeByAmount(ammount);
+                var dateTimeTransaction = DateTime.Now.AddMilliseconds(ammount).ToString(_dateFormat);
 
-                //using (SqlConnection _sss = new SqlConnection(connectionForTransaction))
-                //{
-
-                //}
-
-                for (int intRow = countStart; intRow <= countEnd; intRow++)
+                for (var intRow = 0; intRow <= countEnd; intRow++)
                 {
                     table.Rows.Add(
                         intRow,
-                        intRow,
+                        accountId,
+                        ammount,
+                        currency,
                         transactionType,
-                         ((DateTime)(time.AddMilliseconds(intRow))).ToString(_dateFormat),
-                        transactionType);
+                        dateTimeTransaction
+                        );
                 }
 
-                Console.WriteLine("Open database..");
-                SqlBulkCopy bulkCopy = new SqlBulkCopy(_connection);
-
+                var bulkCopy = new SqlBulkCopy(_connection);
                 _connection.Open();
-                bulkCopy.DestinationTableName = _nameTable;
+                bulkCopy.DestinationTableName = _transactionTable;
                 bulkCopy.BulkCopyTimeout = 0;
-
-                Console.WriteLine("Writing data...");
                 bulkCopy.WriteToServer(table);
             }
         }
 
+        private int GetTransactionTypeByAmount(int amount)
+        {
+            if (amount != 0)
+            {
+                Random random = new Random();
+                return random.Next(2, 4);
+            }
+
+            return (int)TransactionType.Deposit;
+        }
+
+        private int GetCurrencyByAccountId(int id)
+        {
+            return id;
+        }
     }
 }
