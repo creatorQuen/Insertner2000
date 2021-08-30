@@ -7,7 +7,6 @@ namespace Insertner2000.Tables
 {
     public class Lead
     {
-        private string _nameTable = "[CRM.Db].[dbo].[Lead]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
         private const int _daysPearTwoYear = 730;
         private const int _daysPearYear = 365;
@@ -88,7 +87,7 @@ namespace Insertner2000.Tables
                 SqlBulkCopy bulkCopy = new SqlBulkCopy(_connection);
 
                 _connection.Open();
-                bulkCopy.DestinationTableName = _nameTable;
+                bulkCopy.DestinationTableName = ConfigurationForTables.LeadTable;
                 bulkCopy.BulkCopyTimeout = 0;
 
                 Console.WriteLine("Writing data...");

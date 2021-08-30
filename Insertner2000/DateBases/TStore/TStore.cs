@@ -9,7 +9,6 @@ namespace Insertner2000.DateBases.TStore
 {
     public class TStore
     {
-        private static string _transactionTable = "[TransactionStore].[dbo].[Transaction]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
         private const int _countEnd = 10;
         private const int _dayPearHalfYear = 180;
@@ -97,7 +96,7 @@ namespace Insertner2000.DateBases.TStore
 
                 var bulkCopy = new SqlBulkCopy(_connection);
                 _connection.Open();
-                bulkCopy.DestinationTableName = _transactionTable;
+                bulkCopy.DestinationTableName = ConfigurationForTables.TransactionTable;
                 bulkCopy.BulkCopyTimeout = 0;
                 bulkCopy.WriteToServer(table);
             }

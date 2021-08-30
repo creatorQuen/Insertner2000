@@ -8,7 +8,6 @@ namespace Insertner2000.DateBases.CRM
 {
     public class Account
     {
-        private string _accountTable = "[CRM].[dbo].[Account]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
         private Random _random = new Random();
         private const int _dayPearYear = 365;
@@ -40,7 +39,7 @@ namespace Insertner2000.DateBases.CRM
                 {
                     if (LeadId % (countEnd / 100) == 0)
                     {
-                        Console.WriteLine($"Create account {100 * LeadId / countEnd}% done");
+                        Console.WriteLine($"Create account {100 * LeadId / countEnd}% ");
                     }
 
                     var listCurrency = new List<CurrencyType> { CurrencyType.RUB, CurrencyType.USD, CurrencyType.EUR, CurrencyType.JPY };
@@ -98,7 +97,7 @@ namespace Insertner2000.DateBases.CRM
 
                 var bulkCopy = new SqlBulkCopy(_connection);
                 _connection.Open();
-                bulkCopy.DestinationTableName = _accountTable;
+                bulkCopy.DestinationTableName = ConfigurationForTables.AccountTable;
                 bulkCopy.BulkCopyTimeout = 0;
                 Console.WriteLine("Writing data...");
                 bulkCopy.WriteToServer(table);
