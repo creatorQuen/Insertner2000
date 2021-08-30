@@ -9,7 +9,7 @@ namespace Insertner2000.DateBases.CRM
 {
     public class Account
     {
-        private string _accountTable = "[LeadA].[dbo].[Account]";
+        private string _accountTable = "[CRM.Db].[dbo].[Account]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
         private Random _random = new Random();
         private const int _dayPearYear = 365;

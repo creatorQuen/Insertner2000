@@ -6,37 +6,29 @@ namespace Insertner2000
 {
     public class ConfigurationForTables
     {
-        private const string _conStringCrm = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LeadA; Persist Security Info=False;";
-        private const string _conStringTStore = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TStore; Persist Security Info=False;";
+        //private const string _conStringCrm = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LeadA; Persist Security Info=False;";
+        //private const string _conStringTStore = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TStore; Persist Security Info=False;";
+        private const string _conStringCrm = @"Data Source=80.78.240.16;Initial Catalog = CRM.Db; Persist Security Info=True;User ID = student;Password=qwe!23;";
+        private const string _conStringTStore = @"Data Source=80.78.240.16;Initial Catalog = TransactionStore.Db; Persist Security Info=True;User ID = student;Password=qwe!23;";
+        public const int _startCountRows = 1;
+        public const int _endCountRows = 100;
 
         public void LeadsDataBase()
         {
             Lead listLeads = new Lead();
-            listLeads.CreateLeads(1, 1000000, _conStringCrm);
+            listLeads.CreateLeads(_startCountRows, _endCountRows, _conStringCrm);
         }
 
         public void CitiesDataBase()
         {
             City listCities = new City();
-            listCities.CreateCities(1, _conStringCrm);
+            listCities.CreateCities(_startCountRows, _conStringCrm);
         }
 
         public void AccountsDataBase()
         {
             Account listAccounts = new Account();
-            TStore listTransactions = new TStore();
-
-            //listAccounts.CreateAcounts(1, 100, 1, _conStringCRM);
-            //listAccounts.CreateAcounts(101, 150, 2, _conStringCRM);
-            //listAccounts.CreateAcounts(151, 200, 3, _conStringCRM);
-            //listAccounts.CreateAcounts(201, 300, 4, _conStringCRM);
-            listAccounts.CreateAccounts(1, 500, _conStringCrm,_conStringTStore);
-        }
-
-        public void TransactionsDataBase()
-        {
-            //listTransactions.CreateTStores(i, _conStringTStore);
-            //listTransactions.CreateTStores(1, 100, _conStringTStore);
+            listAccounts.CreateAccounts(_startCountRows, _endCountRows, _conStringCrm,_conStringTStore);
         }
     }
 }

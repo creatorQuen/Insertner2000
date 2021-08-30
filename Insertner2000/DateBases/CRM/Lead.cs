@@ -7,8 +7,10 @@ namespace Insertner2000.Tables
 {
     public class Lead
     {
-        private string _nameTable = "Lead";
+        private string _nameTable = "[CRM.Db].[dbo].[Lead]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
+        private const int _daysPearTwoYear = 730;
+        private const int _daysPearYear = 365;
 
         public void CreateLeads(int countStart, int countEnd, string connectionString)
         {
@@ -18,7 +20,7 @@ namespace Insertner2000.Tables
 
                 Random random = new Random();
 
-                int lengthRandomString = 4;
+                int lengthRandomString = 6;
                 int countCity = Enum.GetNames(typeof(CityList)).Length;
                 int countFirstName = Enum.GetNames(typeof(FirstName)).Length;
                 int countLastName = Enum.GetNames(typeof(LastName)).Length;
@@ -53,6 +55,7 @@ namespace Insertner2000.Tables
                     int tmpLastName = (random.Next(1, countLastName + 1));
 
                     var randomString = GenerateStringNotThreadSafe(lengthRandomString);
+                    var randomCreateDate = ((DateTime)(time.AddDays(random.Next(-_daysPearTwoYear, -_daysPearYear)))).ToString(_dateFormat);
 
                     var phoneStart = random.Next(1, 100001).ToString();
                     var phoneEnd = random.Next(1, 100001).ToString();
@@ -62,17 +65,17 @@ namespace Insertner2000.Tables
                     var emailDomain = (Email_Domain)(random.Next(1, countEmail));
                     string emailString = ((FirstName)tmpFirstName).ToString() + ((LastName)tmpLastName).ToString() + randomString + phoneStart + "@" + emailEnd + "." + emailDomain;
 
-                    int nuberForBirthDay = random.Next(1, 10000);
+                    int nuberForBirthDay = random.Next(-5000, 8200);
                     int roleId = random.Next(1, 4);
                     int cityId = random.Next(1, countCity + 1);
                     int boolId = random.Next(0, 2);
-                    
+
                     table.Rows.Add(
                         intRow,
                         (FirstName)tmpFirstName,
                         tmpFirstName <= middleFirstNameCount ? $"{(LastName)(tmpLastName)}" + nameof(Name_End.a) : $"{(LastName)(tmpLastName)}",
                         tmpFirstName <= middleFirstNameCount ? $"{(Patronomic_Begin)(random.Next(1, countFirstName + 1))}" + nameof(Name_End.na) : $"{(Patronomic_Begin)(random.Next(1, countFirstName + 1))}" + nameof(Name_End.ich),
-                         ((DateTime)(time.AddMinutes(intRow))).ToString(_dateFormat),
+                        randomCreateDate,
                         emailString,
                         phoneString,
                         $"{randomString + phoneStart}",
