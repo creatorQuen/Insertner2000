@@ -11,14 +11,13 @@ namespace Insertner2000.Tables
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
         private const int _daysPearTwoYear = 730;
         private const int _daysPearYear = 365;
+        private Random _random = new Random();
 
         public void CreateLeads(int countStart, int countEnd, string connectionString)
         {
             using (SqlConnection _connection = new SqlConnection(connectionString))
             {
                 Console.WriteLine("Starting..");
-
-                Random random = new Random();
 
                 int lengthRandomString = 6;
                 int countCity = Enum.GetNames(typeof(CityList)).Length;
@@ -51,30 +50,30 @@ namespace Insertner2000.Tables
 
                 for (int intRow = countStart; intRow <= countEnd; intRow++)
                 {
-                    int tmpFirstName = (random.Next(1, countFirstName + 1));
-                    int tmpLastName = (random.Next(1, countLastName + 1));
+                    int tmpFirstName = (_random.Next(1, countFirstName + 1));
+                    int tmpLastName = (_random.Next(1, countLastName + 1));
 
                     var randomString = GenerateStringNotThreadSafe(lengthRandomString);
-                    var randomCreateDate = ((DateTime)(time.AddDays(random.Next(-_daysPearTwoYear, -_daysPearYear)))).ToString(_dateFormat);
+                    var randomCreateDate = ((DateTime)(time.AddDays(_random.Next(-_daysPearTwoYear, -_daysPearYear)))).ToString(_dateFormat);
 
-                    var phoneStart = random.Next(1, 100001).ToString();
-                    var phoneEnd = random.Next(1, 100001).ToString();
+                    var phoneStart = _random.Next(1, 100001).ToString();
+                    var phoneEnd = _random.Next(1, 100001).ToString();
                     string phoneString = phoneStart + phoneEnd;
 
-                    var emailEnd = (Email_EndString)(random.Next(1, countEmail));
-                    var emailDomain = (Email_Domain)(random.Next(1, countEmail));
+                    var emailEnd = (Email_EndString)(_random.Next(1, countEmail));
+                    var emailDomain = (Email_Domain)(_random.Next(1, countEmail));
                     string emailString = ((FirstName)tmpFirstName).ToString() + ((LastName)tmpLastName).ToString() + randomString + phoneStart + "@" + emailEnd + "." + emailDomain;
 
-                    int nuberForBirthDay = random.Next(-5000, 8200);
-                    int roleId = random.Next(1, 4);
-                    int cityId = random.Next(1, countCity + 1);
-                    int boolId = random.Next(0, 2);
+                    int nuberForBirthDay = _random.Next(-5000, 8200);
+                    int roleId = _random.Next(1, 4);
+                    int cityId = _random.Next(1, countCity + 1);
+                    int boolId = _random.Next(0, 2);
 
                     table.Rows.Add(
                         intRow,
                         (FirstName)tmpFirstName,
                         tmpFirstName <= middleFirstNameCount ? $"{(LastName)(tmpLastName)}" + nameof(Name_End.a) : $"{(LastName)(tmpLastName)}",
-                        tmpFirstName <= middleFirstNameCount ? $"{(Patronomic_Begin)(random.Next(1, countFirstName + 1))}" + nameof(Name_End.na) : $"{(Patronomic_Begin)(random.Next(1, countFirstName + 1))}" + nameof(Name_End.ich),
+                        tmpFirstName <= middleFirstNameCount ? $"{(Patronomic_Begin)(_random.Next(1, countFirstName + 1))}" + nameof(Name_End.na) : $"{(Patronomic_Begin)(_random.Next(1, countFirstName + 1))}" + nameof(Name_End.ich),
                         randomCreateDate,
                         emailString,
                         phoneString,
@@ -112,11 +111,9 @@ namespace Insertner2000.Tables
             return new string(letters);
         }
 
-        private static readonly Random SingleRandom = new Random();
-
         public string GenerateStringNotThreadSafe(int length)
         {
-            return GenerateString(SingleRandom, length);
+            return GenerateString(_random, length);
         }
     }
 }

@@ -3,13 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using Insertner2000.DateBases.TStore;
 
 namespace Insertner2000.DateBases.CRM
 {
     public class Account
     {
-        private string _accountTable = "[CRM.Db].[dbo].[Account]";
+        private string _accountTable = "[CRM].[dbo].[Account]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
         private Random _random = new Random();
         private const int _dayPearYear = 365;
@@ -39,6 +38,11 @@ namespace Insertner2000.DateBases.CRM
 
                 for (var LeadId = countStart; LeadId <= countEnd; LeadId++)
                 {
+                    if (LeadId % (countEnd / 100) == 0)
+                    {
+                        Console.WriteLine($"Create account {100 * LeadId / countEnd}% done");
+                    }
+
                     var listCurrency = new List<CurrencyType> { CurrencyType.RUB, CurrencyType.USD, CurrencyType.EUR, CurrencyType.JPY };
                     var listCurrencyAccount = new List<CurrencyType>();
                     var array = Enum.GetValues(typeof(CurrencyType));

@@ -9,7 +9,7 @@ namespace Insertner2000.DateBases.TStore
 {
     public class TStore
     {
-        private static string _transactionTable = "[TransactionStore.Db].[dbo].[Transaction]";
+        private static string _transactionTable = "[TransactionStore].[dbo].[Transaction]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
         private const int _countEnd = 10;
         private const int _dayPearHalfYear = 180;
