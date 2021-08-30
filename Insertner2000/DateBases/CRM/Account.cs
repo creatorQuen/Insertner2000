@@ -12,9 +12,9 @@ namespace Insertner2000.DateBases.CRM
         private string _accountTable = "[LeadA].[dbo].[Account]";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
         private Random _random = new Random();
-        private const int _dayPearTwoWeek = 14;
         private const int _dayPearYear = 365;
         private const int _dayPearHalfYear = 180;
+        private const int _dayPearTwoWeek = 14;
 
         public void CreateAccounts(int countStart, int countEnd, string connectionForLeadAccount,string connectionForTransaction)
         {
