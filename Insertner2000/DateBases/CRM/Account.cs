@@ -39,7 +39,7 @@ namespace Insertner2000.DateBases.CRM
                 {
                     if (LeadId % (countEnd / 100) == 0)
                     {
-                        Console.WriteLine($"Create account {100 * LeadId / countEnd}% ");
+                        Console.WriteLine($"Create account {100 * LeadId / countEnd}%");
                     }
 
                     var listCurrency = new List<CurrencyType> { CurrencyType.RUB, CurrencyType.USD, CurrencyType.EUR, CurrencyType.JPY };
@@ -50,7 +50,13 @@ namespace Insertner2000.DateBases.CRM
                     var isDeleted = GetIsDeletedRandom();
                     var closed = GetClosedDataTimeByIsDeleted(isDeleted);
                     var currencyCount = (int)array.GetValue(_random.Next(array.Length));
-                    var timeCreated = DateTime.Now.AddDays(_random.Next(-_dayPearYear * 3 / 2, -_dayPearYear)).ToString(_dateFormat);
+                    var timeCreated = DateTime.Now
+                        .AddDays(_random.Next(-_dayPearYear * 3 / 2, -_dayPearYear))
+                        .AddHours(_random.Next(24))
+                        .AddMinutes(_random.Next(60))
+                        .AddSeconds(_random.Next(60))
+                        .AddMilliseconds(_random.Next(1_0000_000))
+                        .ToString(_dateFormat);
 
                     table.Rows.Add(
                         id,
@@ -72,7 +78,13 @@ namespace Insertner2000.DateBases.CRM
                             {
                                 var isDeletedInCurrecyList = GetIsDeletedRandom();
                                 var closedInCurrecyList = GetClosedDataTimeByIsDeleted(isDeletedInCurrecyList);
-                                timeCreated = DateTime.Now.AddDays(_random.Next(-_dayPearYear, -_dayPearHalfYear)).ToString(_dateFormat);
+                                timeCreated = DateTime.Now
+                                    .AddDays(_random.Next(-_dayPearYear, -_dayPearHalfYear))
+                                    .AddHours(_random.Next(24))
+                                    .AddMinutes(_random.Next(60))
+                                    .AddSeconds(_random.Next(60))
+                                    .AddMilliseconds(_random.Next(1_0000_000))
+                                    .ToString(_dateFormat);
 
                                 table.Rows.Add(
                                     id++,

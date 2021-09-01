@@ -15,7 +15,7 @@ namespace Insertner2000
         //private const string _conStringTStore = @"Data Source=80.78.240.16;Initial Catalog = TransactionStore.Db; Persist Security Info=True;User ID = student;Password=qwe!23;";
         
         public const int _startCountRows = 1;
-        public const int _endCountRows = 10000;
+        public const int _endCountRows = 100;
 
         public void LeadsDataBase()
         {

@@ -30,27 +30,25 @@ namespace Insertner2000.DateBases.TStore
                 table.Columns.Add("Date", typeof(DateTime));
 
                 var amount = 0;
-                var dictionaryCurrencyAmount = new Dictionary<CurrencyType, int>();
-                foreach (var d in dictionary)
-                {
-                    dictionaryCurrencyAmount.Add(d.Value, 0);
-                }
+                var dictionaryCurrencyAmount = dictionary.ToDictionary(d => d.Value, d => 0);
 
                 for (var intRow = 0; intRow <= _countEnd; intRow++)
                 {
                     var currency = GetCurrencyByDictionaryKeys(dictionary);//todo
                     var transactionType = GetTransactionTypeByAmount(dictionaryCurrencyAmount, currency);
-                    var dateTimeTransaction = DateTime.Now.AddDays(_random.Next(-_dayPearHalfYear ,- _dayPearTwoWeek)).ToString(_dateFormat);
+                    var dateTimeTransaction = DateTime.Now
+                        .AddDays(_random.Next(-_dayPearHalfYear ,- _dayPearTwoWeek))
+                        .AddHours(_random.Next(24))
+                        .AddMinutes(_random.Next(60))
+                        .AddSeconds(_random.Next(60))
+                        .AddMilliseconds(_random.Next(1_0000_000))
+                        .ToString(_dateFormat);
                     var key = dictionary.FirstOrDefault(x => x.Value == currency).Key;
                     amount = GetRandomAmountByTransactionType(transactionType, dictionaryCurrencyAmount, currency);
 
                     if (TransactionType.Transfer == transactionType)
                     {
-                        var dictionaryClone = new Dictionary<int, CurrencyType>();
-                        foreach (var dic in dictionary)
-                        {
-                            dictionaryClone.Add(dic.Key, dic.Value);
-                        }
+                        var dictionaryClone = dictionary.ToDictionary(dic => dic.Key, dic => dic.Value);
 
                         dictionaryClone.Remove(key);
 
