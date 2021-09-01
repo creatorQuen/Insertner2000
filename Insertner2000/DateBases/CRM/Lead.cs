@@ -18,20 +18,20 @@ namespace Insertner2000.Tables
             {
                 Console.WriteLine("Starting..");
 
-                int lengthRandomString = 6;
-                int countCity = Enum.GetNames(typeof(CityList)).Length;
-                int countFirstName = Enum.GetNames(typeof(FirstName)).Length;
-                int countLastName = Enum.GetNames(typeof(LastName)).Length;
-                int countEmail = Enum.GetNames(typeof(Email_EndString)).Length;
+                var lengthRandomString = 6;
+                var countCity = Enum.GetNames(typeof(CityList)).Length;
+                var countFirstName = Enum.GetNames(typeof(FirstName)).Length;
+                var countLastName = Enum.GetNames(typeof(LastName)).Length;
+                var countEmail = Enum.GetNames(typeof(Email_EndString)).Length;
                 var middleFirstNameCount = countFirstName / 2;
                 var time = DateTime.Now;
                 var birthDay = new DateTime(1980, 01, 01);
 
-                DataSet dataSet = new DataSet();
+                var dataSet = new DataSet();
 
                 Console.WriteLine("Creating datatable..");
-                DataTable table;
-                table = dataSet.Tables.Add("MockLead");
+                var table = dataSet.Tables.Add("MockLead");
+
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("FirstName", typeof(string));
                 table.Columns.Add("LastName", typeof(string));
@@ -47,26 +47,26 @@ namespace Insertner2000.Tables
 
                 Console.WriteLine("Adding data to datatable..");
 
-                for (int intRow = countStart; intRow <= countEnd; intRow++)
+                for (var intRow = countStart; intRow <= countEnd; intRow++)
                 {
-                    int tmpFirstName = (_random.Next(1, countFirstName + 1));
-                    int tmpLastName = (_random.Next(1, countLastName + 1));
+                    var tmpFirstName = (_random.Next(1, countFirstName + 1));
+                    var tmpLastName = (_random.Next(1, countLastName + 1));
 
                     var randomString = GenerateStringNotThreadSafe(lengthRandomString);
                     var randomCreateDate = ((DateTime)(time.AddDays(_random.Next(-_daysPearTwoYear, -_daysPearYear)))).ToString(_dateFormat);
 
                     var phoneStart = _random.Next(1, 100001).ToString();
                     var phoneEnd = _random.Next(1, 100001).ToString();
-                    string phoneString = phoneStart + phoneEnd;
+                    var phoneString = phoneStart + phoneEnd;
 
                     var emailEnd = (Email_EndString)(_random.Next(1, countEmail));
                     var emailDomain = (Email_Domain)(_random.Next(1, countEmail));
-                    string emailString = ((FirstName)tmpFirstName).ToString() + ((LastName)tmpLastName).ToString() + randomString + phoneStart + "@" + emailEnd + "." + emailDomain;
+                    var emailString = ((FirstName)tmpFirstName).ToString() + ((LastName)tmpLastName).ToString() + randomString + phoneStart + "@" + emailEnd + "." + emailDomain;
 
-                    int nuberForBirthDay = _random.Next(-5000, 8200);
-                    int roleId = _random.Next(1, 4);
-                    int cityId = _random.Next(1, countCity + 1);
-                    int boolId = _random.Next(0, 2);
+                    var numberForBirthDay = _random.Next(-5000, 8200);
+                    var roleId = _random.Next(1, 4);
+                    var cityId = _random.Next(1, countCity + 1);
+                    var boolId = _random.Next(0, 2);
 
                     table.Rows.Add(
                         intRow,
@@ -80,7 +80,7 @@ namespace Insertner2000.Tables
                         roleId,
                         cityId,
                         boolId,
-                        birthDay.AddDays(nuberForBirthDay));
+                        birthDay.AddDays(numberForBirthDay));
                 }
 
                 Console.WriteLine("Open database..");
