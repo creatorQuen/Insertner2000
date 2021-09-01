@@ -18,11 +18,13 @@ namespace Insertner2000.Tables
             {
                 Console.WriteLine("Starting..");
 
-                var lengthRandomString = 6;
-                var countCity = Enum.GetNames(typeof(CityList)).Length;
-                var countFirstName = Enum.GetNames(typeof(FirstName)).Length;
-                var countLastName = Enum.GetNames(typeof(LastName)).Length;
-                var countEmail = Enum.GetNames(typeof(Email_EndString)).Length;
+                Random random = new Random();
+
+                int lengthRandomString = 6;
+                int countCity = Enum.GetNames(typeof(CityList)).Length;
+                int countFirstName = Enum.GetNames(typeof(FirstName)).Length;
+                int countLastName = Enum.GetNames(typeof(LastName)).Length;
+                int countEmail = Enum.GetNames(typeof(Email_EndString)).Length;
                 var middleFirstNameCount = countFirstName / 2;
                 var time = DateTime.Now;
                 var birthDay = new DateTime(1980, 01, 01);
@@ -53,7 +55,7 @@ namespace Insertner2000.Tables
                     var tmpLastName = (_random.Next(1, countLastName + 1));
 
                     var randomString = GenerateStringNotThreadSafe(lengthRandomString);
-                    var randomCreateDate = ((DateTime)(time.AddDays(_random.Next(-_daysPearTwoYear, -_daysPearYear)))).ToString(_dateFormat);
+                    var randomCreateDate = ((DateTime)(time.AddDays(random.Next(-_daysPearTwoYear, -_daysPearYear)))).ToString(_dateFormat);
 
                     var phoneStart = _random.Next(1, 100001).ToString();
                     var phoneEnd = _random.Next(1, 100001).ToString();
@@ -63,16 +65,16 @@ namespace Insertner2000.Tables
                     var emailDomain = (Email_Domain)(_random.Next(1, countEmail));
                     var emailString = ((FirstName)tmpFirstName).ToString() + ((LastName)tmpLastName).ToString() + randomString + phoneStart + "@" + emailEnd + "." + emailDomain;
 
-                    var numberForBirthDay = _random.Next(-5000, 8200);
-                    var roleId = _random.Next(1, 4);
-                    var cityId = _random.Next(1, countCity + 1);
-                    var boolId = _random.Next(0, 2);
-
+                    int nuberForBirthDay = random.Next(-5000, 8200);
+                    int roleId = random.Next(1, 4);
+                    int cityId = random.Next(1, countCity + 1);
+                    int boolId = random.Next(0, 2);
+                    
                     table.Rows.Add(
                         intRow,
                         (FirstName)tmpFirstName,
                         tmpFirstName <= middleFirstNameCount ? $"{(LastName)(tmpLastName)}" + nameof(Name_End.a) : $"{(LastName)(tmpLastName)}",
-                        tmpFirstName <= middleFirstNameCount ? $"{(Patronomic_Begin)(_random.Next(1, countFirstName + 1))}" + nameof(Name_End.na) : $"{(Patronomic_Begin)(_random.Next(1, countFirstName + 1))}" + nameof(Name_End.ich),
+                        tmpFirstName <= middleFirstNameCount ? $"{(Patronomic_Begin)(random.Next(1, countFirstName + 1))}" + nameof(Name_End.na) : $"{(Patronomic_Begin)(random.Next(1, countFirstName + 1))}" + nameof(Name_End.ich),
                         randomCreateDate,
                         emailString,
                         phoneString,

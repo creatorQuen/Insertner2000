@@ -23,7 +23,6 @@ namespace Insertner2000
             Console.WriteLine();
             Console.WriteLine("Done. Press any key to exit.");
             Console.ReadKey();
-
         }
     }
 }

@@ -38,10 +38,6 @@ namespace Insertner2000.Tables
                 Console.WriteLine("Writing data...");
                 bulkCopy.WriteToServer(table);
             }
-            //_connection.Close();
-            //_connection.Dispose();
-            //dataSet.Dispose();
-            //table.Dispose();
         }
     }
 }

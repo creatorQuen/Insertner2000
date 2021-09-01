@@ -19,21 +19,20 @@ namespace Insertner2000
 
         public void LeadsDataBase()
         {
-            var listLeads = new Lead();
-            //listLeads.CreateLeads(_startCountRows, _endCountRows, _conStringCrm);
+            Lead listLeads = new Lead();
+            listLeads.CreateLeads(_startCountRows, _endCountRows, _conStringCRM);
         }
 
         public void CitiesDataBase()
         {
-            var listCities = new City();
-            //listCities.CreateCities(_startCountRows, _conStringCrm);
+            City listCities = new City();
+            listCities.CreateCities(_startCountRows, _conStringCRM);
         }
 
         public void AccountsDataBase()
         {
-            var listAccounts = new Account();
-            listAccounts.CreateAccounts(_startCountRows, _endCountRows, _conStringCrm,_conStringTStore);
-
+            Account listAccounts = new Account();
+            listAccounts.CreateAcounts(_startCountRows, _endCountRows, _conStringCRM, _conStringTStore);
         }
     }
 }
