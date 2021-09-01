@@ -8,31 +8,39 @@ namespace Insertner2000.Tables
     public class City
     {
         private string _nameTable = "City";
+
         public void CreateCities(int countStart, string connectionString)
         {
             using (SqlConnection _connection = new SqlConnection(connectionString))
             {
                 Console.WriteLine("Starting..");
-                DataSet dataSet = new DataSet();
-                int countCity = Enum.GetNames(typeof(CityList)).Length;
 
-                Console.WriteLine("Creating datatable..");
-                DataTable table;
-                table = dataSet.Tables.Add("MockCity");
+                var dataSet = new DataSet();
+                var countCity = Enum.GetNames(typeof(CityList)).Length;
+
+                Console.WriteLine("Creating dataTable..");
+
+                var table = dataSet.Tables.Add("MockCity");
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("Name", typeof(string));
+                
+                Console.WriteLine("Adding data to dataTable [Cities]");
 
-                Console.WriteLine("Adding data to datatable..");
-                for (int intRow = countStart; intRow <= countCity; intRow++)
+                for (var intRow = countStart; intRow <= countCity; intRow++)
                 {
+                    if (intRow % (countCity / 100) == 0)
+                    {
+                        Console.WriteLine($"Cities done: {100 * intRow / countCity}%");
+                    }
+
                     table.Rows.Add(intRow, $"{(CityList)intRow}");
                 }
 
                 Console.WriteLine("Open database..");
-                SqlBulkCopy bulkCopy = new SqlBulkCopy(_connection);
+                var bulkCopy = new SqlBulkCopy(_connection);
 
                 _connection.Open();
-                bulkCopy.DestinationTableName = _nameTable;
+                bulkCopy.DestinationTableName = ConfigurationForTables.CityTable;
                 bulkCopy.BulkCopyTimeout = 0;
 
                 Console.WriteLine("Writing data...");

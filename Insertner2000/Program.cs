@@ -10,9 +10,9 @@ namespace Insertner2000
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            ConfigurationForTables tables = new ConfigurationForTables();
+            var tables = new ConfigurationForTables();
 
-            //tables.CitiesDataBase();
+            tables.CitiesDataBase();
             tables.LeadsDataBase();
             tables.AccountsDataBase();
 

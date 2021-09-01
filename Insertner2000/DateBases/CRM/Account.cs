@@ -14,7 +14,7 @@ namespace Insertner2000.DateBases.CRM
         private const int _dayPearHalfYear = 180;
         private const int _dayPearTwoWeek = 14;
 
-        public void CreateAccounts(int countStart, int countEnd, string connectionForLeadAccount,string connectionForTransaction)
+        public void CreateAccounts(int countStart, int countEnd, string connectionForLeadAccount, string connectionForTransaction)
         {
             using (SqlConnection _connection = new SqlConnection(connectionForLeadAccount))
             {
@@ -33,13 +33,13 @@ namespace Insertner2000.DateBases.CRM
                 table.Columns.Add("Closed", typeof(DateTime));
                 table.Columns.Add("IsDeleted", typeof(bool));
 
-                Console.WriteLine("Adding data to dataTable..");
+                Console.WriteLine("Adding data to dataTable [Accounts]");
 
                 for (var LeadId = countStart; LeadId <= countEnd; LeadId++)
                 {
                     if (LeadId % (countEnd / 100) == 0)
                     {
-                        Console.WriteLine($"Create account {100 * LeadId / countEnd}%");
+                        Console.WriteLine($"Accounts done: {100 * LeadId / countEnd}%");
                     }
 
                     var listCurrency = new List<CurrencyType> { CurrencyType.RUB, CurrencyType.USD, CurrencyType.EUR, CurrencyType.JPY };

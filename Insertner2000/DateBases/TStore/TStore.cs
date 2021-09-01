@@ -10,7 +10,6 @@ namespace Insertner2000.DateBases.TStore
     public class TStore
     {
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
-        private const int _countEnd = 10;
         private const int _dayPearHalfYear = 180;
         private const int _dayPearTwoWeek = 14;
         private readonly Random _random = new Random();
@@ -32,7 +31,7 @@ namespace Insertner2000.DateBases.TStore
                 var amount = 0;
                 var dictionaryCurrencyAmount = dictionary.ToDictionary(d => d.Value, d => 0);
 
-                for (var intRow = 0; intRow <= _countEnd; intRow++)
+                for (var intRow = 0; intRow <= ConfigurationForTables.TransactionCountByAccount; intRow++)
                 {
                     var currency = GetCurrencyByDictionaryKeys(dictionary);//todo
                     var transactionType = GetTransactionTypeByAmount(dictionaryCurrencyAmount, currency);
@@ -57,16 +56,6 @@ namespace Insertner2000.DateBases.TStore
 
                         table.Rows.Add(
                             intRow,
-                            index,//dictionary.key
-                            amount,
-                            payee,//dictionary.value
-                            transactionType,
-                            dateTimeTransaction
-                            );
-                        dictionaryCurrencyAmount[payee] += amount;
-
-                        table.Rows.Add(
-                            intRow,
                             key,//dictionary.key
                             -amount,
                             dictionary[key],//dictionary.value
@@ -74,6 +63,16 @@ namespace Insertner2000.DateBases.TStore
                             dateTimeTransaction
                         );
                         dictionaryCurrencyAmount[dictionary[key]] -= amount;
+
+                        table.Rows.Add(
+                            intRow,
+                            index,//dictionary.key
+                            amount,
+                            payee,//dictionary.value
+                            transactionType,
+                            dateTimeTransaction
+                            );
+                        dictionaryCurrencyAmount[payee] += amount;
 
                         amount = _random.Next(-50, 100);
                         continue;
