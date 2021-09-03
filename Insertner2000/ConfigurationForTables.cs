@@ -6,9 +6,11 @@ namespace Insertner2000
 {
     public class ConfigurationForTables
     {
-        private const string _conStringCrm = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LeadA; Persist Security Info=False;";
-        private const string _conStringTStore = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TStore; Persist Security Info=False;";
-
+        //private const string _conStringCrm = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LeadA; Persist Security Info=False;";
+        //private const string _conStringTStore = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TStore; Persist Security Info=False;";
+        private const string _conStringCrm = @"Data Source=80.78.240.16;Initial Catalog = CRM.Db; Persist Security Info=True;User ID = student;Password=qwe!23;";
+        private const string _conStringTStore = @"Data Source=80.78.240.16;Initial Catalog = TransactionStore.Db; Persist Security Info=True;User ID = student;Password=qwe!23;";
+        
         public void LeadsDataBase()
         {
             Lead listLeads = new Lead();
@@ -30,7 +32,7 @@ namespace Insertner2000
             //listAccounts.CreateAcounts(101, 150, 2, _conStringCRM);
             //listAccounts.CreateAcounts(151, 200, 3, _conStringCRM);
             //listAccounts.CreateAcounts(201, 300, 4, _conStringCRM);
-            listAccounts.CreateAccounts(1, 500, _conStringCrm,_conStringTStore);
+            listAccounts.CreateAccounts(200001, 300000, _conStringCrm,_conStringTStore);
         }
 
         public void TransactionsDataBase()
