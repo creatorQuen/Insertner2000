@@ -1,4 +1,5 @@
-﻿using Insertner2000.Entity;
+﻿using Dapper;
+using Insertner2000.Entity;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -14,7 +15,7 @@ namespace Insertner2000.Tables
 
         public void CreateLeads(int countStart, int countEnd, string connectionString)
         {
-            using (SqlConnection _connection = new SqlConnection(connectionString))
+            using (IDbConnection _connection = new SqlConnection(connectionString))
             {
                 Console.WriteLine("Starting..");
 
@@ -43,7 +44,7 @@ namespace Insertner2000.Tables
                 table.Columns.Add("Role", typeof(int));
                 table.Columns.Add("CityId", typeof(int));
                 table.Columns.Add("IsDeleted", typeof(bool));
-                //table.Columns.Add("BirthDay", typeof(DateTime));
+                table.Columns.Add("BirthDay", typeof(DateTime));
 
                 Console.WriteLine("Adding data to dataTable [Leads]");
 
@@ -58,7 +59,7 @@ namespace Insertner2000.Tables
                     var tmpLastName = (_random.Next(1, countLastName + 1));
 
                     var randomString = GenerateStringNotThreadSafe(lengthRandomString);
-                    var randomCreateDate = time.AddDays(_random.Next(-_daysPearTwoYear, -_daysPearYear)).ToString(_dateFormat);
+                    var randomCreateDate = new DateTime(2021, 01, 01).ToString(_dateFormat);
 
                     var phoneStart = _random.Next(1, 100001).ToString();
                     var phoneEnd = _random.Next(1, 100001).ToString();
@@ -72,32 +73,18 @@ namespace Insertner2000.Tables
                     var roleId = _random.Next(1, 4);
                     var cityId = _random.Next(1, countCity + 1);
                     var boolId = _random.Next(0, 2);
-                    
-                    table.Rows.Add(
-                        intRow,
-                        (FirstName)tmpFirstName,
-                        tmpFirstName <= middleFirstNameCount ? $"{(LastName)(tmpLastName)}" + nameof(Name_End.a) : $"{(LastName)(tmpLastName)}",
-                        tmpFirstName <= middleFirstNameCount ? $"{(Patronomic_Begin)(_random.Next(1, countFirstName + 1))}" + nameof(Name_End.na) : $"{(Patronomic_Begin)(_random.Next(1, countFirstName + 1))}" + nameof(Name_End.ich),
-                        randomCreateDate,
-                        emailString,
-                        phoneString,
-                        $"{randomString + phoneStart}",
-                        roleId,
-                        cityId,
-                        boolId//,
-                        //birthDay.AddDays(numberForBirthDay)
-                        );
+
+                    var FirstName = $"{(FirstName)tmpFirstName}";
+                    var LastName = tmpFirstName <= middleFirstNameCount ? $"{(LastName)(tmpLastName)}" + nameof(Name_End.a) : $"{(LastName)(tmpLastName)}";
+                    var Patronymic = tmpFirstName <= middleFirstNameCount ? $"{(Patronomic_Begin)(_random.Next(1, countFirstName + 1))}" + nameof(Name_End.na) : $"{(Patronomic_Begin)(_random.Next(1, countFirstName + 1))}" + nameof(Name_End.ich);
+                    var Password = "123456789";
+                    var BirthDate = birthDay.AddDays(numberForBirthDay);
+
+                    var sql = @"INSERT INTO dbo.Lead (FirstName, LastName, Patronymic, RegistrationDate, Email, PhoneNumber, Password, Role, CityId, IsDeleted, BirthDate)
+                                VALUES (@FirstName, @LastName, @Patronymic, @RegistrationDate, @Email, @PhoneNumber, @Password, @Role, @CityId, @IsDeleted, @BirthDate)";
+                    _connection.Execute(sql, new { FirstName = FirstName, LastName = LastName, Patronymic = Patronymic, RegistrationDate = randomCreateDate, Email = emailString,
+                        PhoneNumber = phoneString, Password = Password, Role = roleId, CityId = cityId, IsDeleted = boolId, BirthDate = BirthDate });
                 }
-
-                Console.WriteLine("Open database..");
-                var bulkCopy = new SqlBulkCopy(_connection);
-
-                _connection.Open();
-                bulkCopy.DestinationTableName = ConfigurationForTables.LeadTable;
-                bulkCopy.BulkCopyTimeout = 0;
-
-                Console.WriteLine("Writing data...");
-                bulkCopy.WriteToServer(table);
             }
         }
 
