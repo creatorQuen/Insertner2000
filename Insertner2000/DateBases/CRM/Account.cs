@@ -8,6 +8,8 @@ namespace Insertner2000.DateBases.CRM
 {
     public class Account
     {
+        private const string messageStart = "Start write.\n";
+        private const string messageEnd = "\nCongratulation. Write is done";
         private const string _dateFormat = "dd.MM.yyyy HH:mm:ss.fffffff";
         private Random _random = new Random();
         private const int _dayPearYear = 365;
@@ -35,76 +37,89 @@ namespace Insertner2000.DateBases.CRM
 
                 Console.WriteLine("Adding data to dataTable [Accounts]");
 
-                for (var LeadId = countStart; LeadId <= countEnd; LeadId++)
+
+
+                var difference = countEnd - countStart;
+                var percent = 0;
+                Console.Write(messageStart);
+                using (var progress = new ProgressBar(/*В место коментария можно указать колличество решеточек*/))
                 {
-                    if (LeadId % (countEnd / 100) == 0)
+                    for (var LeadId = countStart; LeadId <= countEnd; LeadId++)
                     {
-                        Console.WriteLine($"Accounts done: {100 * LeadId / countEnd}%");
-                    }
-
-                    var listCurrency = new List<CurrencyType> { CurrencyType.RUB, CurrencyType.USD, CurrencyType.EUR, CurrencyType.JPY };
-                    var listCurrencyAccount = new List<CurrencyType>();
-                    var array = Enum.GetValues(typeof(CurrencyType));
-                    var dictionary = new Dictionary<int, CurrencyType>();
-
-                    var isDeleted = GetIsDeletedRandom();
-                    var closed = GetClosedDataTimeByIsDeleted(isDeleted);
-                    var currencyCount = (int)array.GetValue(_random.Next(array.Length));
-                    var timeCreated = DateTime.Now
-                        .AddDays(_random.Next(-_dayPearYear * 3 / 2, -_dayPearYear))
-                        .AddHours(_random.Next(24))
-                        .AddMinutes(_random.Next(60))
-                        .AddSeconds(_random.Next(60))
-                        .AddMilliseconds(_random.Next(1_0000_000))
-                        .ToString(_dateFormat);
-
-                    table.Rows.Add(
-                        id,
-                        LeadId,
-                        CurrencyType.RUB,
-                        timeCreated,
-                        closed,
-                        isDeleted
-                        );
-                    dictionary.Add(id, CurrencyType.RUB);
-                    listCurrencyAccount.Add(CurrencyType.RUB);
-
-                    for (int i = 0; i < currencyCount; i++)
-                    {
-                        if (1 < currencyCount)
+                        var delta = LeadId + 1 - countStart;
+                        var currentPercent = delta * 100 / difference;
+                        if (currentPercent != percent)
                         {
-                            var currencyRandom = _random.Next(1, listCurrency.Count + 1);
-                            if (!listCurrencyAccount.Contains((CurrencyType)currencyRandom))
-                            {
-                                var isDeletedInCurrecyList = GetIsDeletedRandom();
-                                var closedInCurrecyList = GetClosedDataTimeByIsDeleted(isDeletedInCurrecyList);
-                                timeCreated = DateTime.Now
-                                    .AddDays(_random.Next(-_dayPearYear, -_dayPearHalfYear))
-                                    .AddHours(_random.Next(24))
-                                    .AddMinutes(_random.Next(60))
-                                    .AddSeconds(_random.Next(60))
-                                    .AddMilliseconds(_random.Next(1_0000_000))
-                                    .ToString(_dateFormat);
+                            percent = currentPercent;
+                            progress.Report((double)percent / 100);
+                        }
 
-                                table.Rows.Add(
-                                    id++,
-                                    LeadId,
-                                    (CurrencyType)currencyRandom,
-                                    timeCreated,
-                                    closedInCurrecyList,
-                                    isDeletedInCurrecyList
-                                    );
-                                dictionary.Add(id, (CurrencyType)currencyRandom);
-                                listCurrencyAccount.Add((CurrencyType)currencyRandom);
-                                listCurrency.Remove((CurrencyType)currencyRandom);
+                        var listCurrency = new List<CurrencyType> { CurrencyType.RUB, CurrencyType.USD, CurrencyType.EUR, CurrencyType.JPY };
+                        var listCurrencyAccount = new List<CurrencyType>();
+                        var array = Enum.GetValues(typeof(CurrencyType));
+                        var dictionary = new Dictionary<int, CurrencyType>();
+
+                        var isDeleted = GetIsDeletedRandom();
+                        var closed = GetClosedDataTimeByIsDeleted(isDeleted);
+                        var currencyCount = (int)array.GetValue(_random.Next(array.Length));
+                        var timeCreated = DateTime.Now
+                            .AddDays(_random.Next(-_dayPearYear * 3 / 2, -_dayPearYear))
+                            .AddHours(_random.Next(24))
+                            .AddMinutes(_random.Next(60))
+                            .AddSeconds(_random.Next(60))
+                            .AddMilliseconds(_random.Next(1_0000_000))
+                            .ToString(_dateFormat);
+
+                        table.Rows.Add(
+                            id,
+                            LeadId,
+                            CurrencyType.RUB,
+                            timeCreated,
+                            closed,
+                            isDeleted
+                            );
+                        dictionary.Add(id, CurrencyType.RUB);
+                        listCurrencyAccount.Add(CurrencyType.RUB);
+
+                        for (int i = 0; i < currencyCount; i++)
+                        {
+                            if (1 < currencyCount)
+                            {
+                                var currencyRandom = _random.Next(1, listCurrency.Count + 1);
+                                if (!listCurrencyAccount.Contains((CurrencyType)currencyRandom))
+                                {
+                                    var isDeletedInCurrecyList = GetIsDeletedRandom();
+                                    var closedInCurrecyList = GetClosedDataTimeByIsDeleted(isDeletedInCurrecyList);
+                                    timeCreated = DateTime.Now
+                                        .AddDays(_random.Next(-_dayPearYear, -_dayPearHalfYear))
+                                        .AddHours(_random.Next(24))
+                                        .AddMinutes(_random.Next(60))
+                                        .AddSeconds(_random.Next(60))
+                                        .AddMilliseconds(_random.Next(1_0000_000))
+                                        .ToString(_dateFormat);
+
+                                    table.Rows.Add(
+                                        id++,
+                                        LeadId,
+                                        (CurrencyType)currencyRandom,
+                                        timeCreated,
+                                        closedInCurrecyList,
+                                        isDeletedInCurrecyList
+                                        );
+                                    dictionary.Add(id, (CurrencyType)currencyRandom);
+                                    listCurrencyAccount.Add((CurrencyType)currencyRandom);
+                                    listCurrency.Remove((CurrencyType)currencyRandom);
+                                }
                             }
                         }
-                    }
-                    id++;
+                        id++;
 
-                    var store = new TStore.TStore();
-                    store.CreateTStores(dictionary, connectionForTransaction);
+                        var store = new TStore.TStore();
+                        store.CreateTStores(dictionary, connectionForTransaction);
+                    }
                 }
+                Console.WriteLine(messageEnd);
+
                 Console.WriteLine("Open dataBase..");
 
                 var bulkCopy = new SqlBulkCopy(_connection);
