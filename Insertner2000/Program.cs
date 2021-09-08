@@ -12,13 +12,14 @@ namespace Insertner2000
 
             var tables = new ConfigurationForTables();
 
-            tables.CitiesDataBase();
-            tables.LeadsDataBase();
+            //tables.CitiesDataBase();
+            //tables.LeadsDataBase();
             tables.AccountsDataBase();
 
             stopWatch.Stop();
             Console.WriteLine();
-            Console.WriteLine($"Total time in minutes:{TimeSpan.FromMilliseconds(stopWatch.ElapsedMilliseconds).Minutes}");
+            Console.WriteLine($"Total time in hours:{TimeSpan.FromMilliseconds(stopWatch.ElapsedMilliseconds).Hours}");
+            Console.WriteLine($"      time in minutes:{TimeSpan.FromMilliseconds(stopWatch.ElapsedMilliseconds).Minutes}");
             Console.WriteLine($"      time in seconds:{TimeSpan.FromMilliseconds(stopWatch.ElapsedMilliseconds).Seconds}");
             Console.WriteLine();
             Console.WriteLine("Done. Press any key to exit.");
