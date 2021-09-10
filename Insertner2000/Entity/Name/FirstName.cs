@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Insertner2000.Entity
+﻿namespace Insertner2000.Entity
 {   // First one to half is female name, another half is male name
     public enum FirstName
     {

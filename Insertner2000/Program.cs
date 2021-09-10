@@ -10,22 +10,20 @@ namespace Insertner2000
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            ConfigurationForTables tables = new ConfigurationForTables();
+            var tables = new ConfigurationForTables();
 
             //tables.CitiesDataBase();
             //tables.LeadsDataBase();
             tables.AccountsDataBase();
 
-            //tables.TransactionsDataBase();
-
             stopWatch.Stop();
             Console.WriteLine();
-            Console.WriteLine($"Total time in minutes:{TimeSpan.FromMilliseconds(stopWatch.ElapsedMilliseconds).Minutes}");
+            Console.WriteLine($"Total time in hours:{TimeSpan.FromMilliseconds(stopWatch.ElapsedMilliseconds).Hours}");
+            Console.WriteLine($"      time in minutes:{TimeSpan.FromMilliseconds(stopWatch.ElapsedMilliseconds).Minutes}");
             Console.WriteLine($"      time in seconds:{TimeSpan.FromMilliseconds(stopWatch.ElapsedMilliseconds).Seconds}");
             Console.WriteLine();
             Console.WriteLine("Done. Press any key to exit.");
             Console.ReadKey();
-
         }
     }
 }
