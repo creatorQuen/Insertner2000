@@ -60,8 +60,8 @@ namespace Insertner2000.DateBases.TStore
                             -amount,
                             dictionary[key],//dictionary.value
                             transactionType,
-                            dateTimeTransaction
-                        );
+                            dateTimeTransaction);
+
                         dictionaryCurrencyAmount[dictionary[key]] -= amount;
 
                         table.Rows.Add(
@@ -70,10 +70,9 @@ namespace Insertner2000.DateBases.TStore
                             amount,
                             payee,//dictionary.value
                             transactionType,
-                            dateTimeTransaction
-                            );
-                        dictionaryCurrencyAmount[payee] += amount;
+                            dateTimeTransaction);
 
+                        dictionaryCurrencyAmount[payee] += amount;
                         amount = _random.Next(-50, 100);
                         continue;
                     }
@@ -84,10 +83,9 @@ namespace Insertner2000.DateBases.TStore
                         amount,
                         dictionary[key],//dictionary.value
                         transactionType,
-                        dateTimeTransaction
-                        );
-                    dictionaryCurrencyAmount[dictionary[key]] += amount;
+                        dateTimeTransaction);
 
+                    dictionaryCurrencyAmount[dictionary[key]] += amount;
                     amount = _random.Next(-50, 100);
                 }
 

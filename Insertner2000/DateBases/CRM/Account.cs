@@ -16,13 +16,13 @@ namespace Insertner2000.DateBases.CRM
         private const int _dayPearHalfYear = 180;
         private const int _dayPearTwoWeek = 14;
 
-        public void CreateAccounts(int countStart, int countEnd, string connectionForLeadAccount, string connectionForTransaction)
+        public void CreateAccounts(string connectionForLeadAccount, string connectionForTransaction)
         {
             using (SqlConnection _connection = new SqlConnection(connectionForLeadAccount))
             {
                 Console.WriteLine("Starting..");
 
-                var id = countStart;
+                var LeadId = ConfigurationForTables.LeadIdStart;
                 var dataSet = new DataSet();
                 var table = dataSet.Tables.Add("ttmpData");
 
@@ -37,16 +37,14 @@ namespace Insertner2000.DateBases.CRM
 
                 Console.WriteLine("Adding data to dataTable [Accounts]");
 
-
-
-                var difference = countEnd - countStart;
+                var difference = ConfigurationForTables.AccountIdEnd - ConfigurationForTables.AccountIdStart;
                 var percent = 0;
                 Console.Write(messageStart);
                 using (var progress = new ProgressBar(/*В место коментария можно указать колличество решеточек*/))
                 {
-                    for (var LeadId = countStart; LeadId <= countEnd; LeadId++)
+                    for (var id = ConfigurationForTables.AccountIdStart; id <= ConfigurationForTables.AccountIdEnd; LeadId++)
                     {
-                        var delta = LeadId + 1 - countStart;
+                        var delta = LeadId + 1 - ConfigurationForTables.AccountIdStart;
                         var currentPercent = delta * 100 / difference;
                         if (currentPercent != percent)
                         {
@@ -104,8 +102,8 @@ namespace Insertner2000.DateBases.CRM
                                         (CurrencyType)currencyRandom,
                                         timeCreated,
                                         closedInCurrecyList,
-                                        isDeletedInCurrecyList
-                                        );
+                                        isDeletedInCurrecyList);
+
                                     dictionary.Add(id, (CurrencyType)currencyRandom);
                                     listCurrencyAccount.Add((CurrencyType)currencyRandom);
                                     listCurrency.Remove((CurrencyType)currencyRandom);
