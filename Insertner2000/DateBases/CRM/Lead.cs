@@ -43,7 +43,10 @@ namespace Insertner2000.Tables
                 table.Columns.Add("Role", typeof(int));
                 table.Columns.Add("CityId", typeof(int));
                 table.Columns.Add("IsDeleted", typeof(bool));
-                table.Columns.Add("BirthDay", typeof(DateTime));
+                table.Columns.Add("BirthDate", typeof(DateTime));
+                table.Columns.Add("BirthYear", typeof(int));
+                table.Columns.Add("BirthMonth", typeof(int));
+                table.Columns.Add("BirthDay", typeof(int));
 
                 Console.WriteLine("Adding data to dataTable [Leads]");
 
@@ -85,7 +88,10 @@ namespace Insertner2000.Tables
                         roleId,
                         cityId,
                         boolId,
-                        birthDay.AddDays(numberForBirthDay)
+                        birthDay.AddDays(numberForBirthDay),
+                        1,
+                        1,
+                        1
                         );
                 }
 
