@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31321.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31710.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insertner2000", "Insertner2000\Insertner2000.csproj", "{369C73DE-D260-4246-B0CB-7B96F0305CA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insertner2000.ZLooMod", "Insertner2000.ZLooMod\Insertner2000.ZLooMod.csproj", "{CA862A03-2D1E-4E5D-A704-A881C74603F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insertner2000.ZLooLibs", "Insertner2000.ZLooLibs\Insertner2000.ZLooLibs.csproj", "{782CF3EF-6BC7-4EE2-99BD-55807A6DD472}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{369C73DE-D260-4246-B0CB-7B96F0305CA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{369C73DE-D260-4246-B0CB-7B96F0305CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{369C73DE-D260-4246-B0CB-7B96F0305CA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA862A03-2D1E-4E5D-A704-A881C74603F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA862A03-2D1E-4E5D-A704-A881C74603F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA862A03-2D1E-4E5D-A704-A881C74603F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA862A03-2D1E-4E5D-A704-A881C74603F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{782CF3EF-6BC7-4EE2-99BD-55807A6DD472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{782CF3EF-6BC7-4EE2-99BD-55807A6DD472}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{782CF3EF-6BC7-4EE2-99BD-55807A6DD472}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{782CF3EF-6BC7-4EE2-99BD-55807A6DD472}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
