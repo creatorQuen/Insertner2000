@@ -1,4 +1,6 @@
-﻿namespace Insertner2000.ZLooLibs
+﻿using System.Collections.Generic;
+
+namespace Insertner2000.ZLooLibs
 {
     public partial struct FIOs
     {
@@ -40,5 +42,48 @@
         private const string Vasilyev = "Vasilyev";
         private const string Viktorov = "Viktorov";
         private const string Yuryev = "Yuryev";
+
+        private static List<string> CreatePatronymics() =>
+        new()
+        {
+            Aleksandrov,
+            Alekseyev,
+            Anatolyev,
+            Andreyev,
+            Antonov,
+            Denisov,
+            Dmitriye,
+            Ernestov,
+            Evgenyev,
+            Fedorov,
+            Filippov,
+            Gennadyev,
+            Georgiyev,
+            Igorev,
+            Innokentyev,
+            Ivanov,
+            Karpov,
+            Kirillov,
+            Konstantinov,
+            Leonidov,
+            Leybov,
+            Maksimov,
+            Maratov,
+            Mironov,
+            Nikolayev,
+            Olegov,
+            Petrov,
+            Platonov,
+            Rodionov,
+            Ruslanov,
+            Rustamov,
+            Safronov,
+            Sergeyev,
+            Stanislavov,
+            Timofeyev,
+            Vasilyev,
+            Viktorov,
+            Yuryev
+        };
     }
 }

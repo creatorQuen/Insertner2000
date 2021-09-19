@@ -5,10 +5,11 @@ namespace Insertner2000.ZLooLibs
 {
     public partial struct FIOs
     {
-        private static List<string> _firstNamesMale = CreateFirstNamesMale();
-        private static List<string> _firstNamesFemale = CreateFirstNamesFemale();
-        private static List<string> _lastNames = CreateLastNames();
-        private static List<string> _patronymics = CreatePatronymics();
+        private static IReadOnlyDictionary<int, IReadOnlyDictionary<string, string>>? FIOsData;
+        private static readonly List<string> FirstNamesMale = CreateFirstNamesMale();
+        private static readonly List<string> FirstNamesFemale = CreateFirstNamesFemale();
+        private static readonly List<string> LastNames = CreateLastNames();
+        private static readonly List<string> Patronymics = CreatePatronymics();
 
         private const string EndingFormat = "{0}{1}";
 
@@ -16,170 +17,61 @@ namespace Insertner2000.ZLooLibs
         private const string EndingNa = "na";
         private const string EndingA = "a";
 
-
-        public static void GetFIOsMale(out IReadOnlyDictionary<string, IReadOnlyList<string>> males)
-        {
-            IReadOnlyList<string> patronimics = _patronymics.Select(patronymic => string.Format(EndingFormat, patronymic, EndingIch)).ToList();
-            Dictionary<string, IReadOnlyList<string>> male = new()
-            {
-                { nameof(_firstNamesMale), _firstNamesMale },
-                { nameof(_lastNames), _lastNames },
-                { nameof(_patronymics), patronimics }
-            };
-            males = male;
-        }
-
-        public static void GetFIOsFemale(out IReadOnlyDictionary<string, IReadOnlyList<string>> females)
-        {
-            IReadOnlyList<string> lastNames = _lastNames.Select(lastNames => string.Format(EndingFormat, lastNames, EndingA)).ToList();
-            IReadOnlyList<string> patronimics = _patronymics.Select(patronymic => string.Format(EndingFormat, patronymic, EndingNa)).ToList();
-            Dictionary<string, IReadOnlyList<string>> female = new()
-            {
-                { nameof(_firstNamesFemale), _firstNamesFemale },
-                { nameof(_lastNames), lastNames },
-                { nameof(_patronymics), patronimics }
-            };
-            females = female;
-        }
-
-
-        private static List<string> CreateFirstNamesMale() =>
-        new()
-        {
-            Aleksandr,
-            Alexsey,
-            Anton,
-            Andrey,
-            Artem,
-            Artur,
-            Boris,
-            Brown,
-            Evgeniy,
-            Maksim,
-            Kirill,
-            Sergey,
-            Peter,
-            Stanislav,
-            Stefan,
-            Timur,
-            Vadim,
-            Valentin,
-            Vladimir,
-            Viktor
-        };
+        private const string FirstName = "FirstName";
+        private const string LastName = "LastName";
+        private const string Patronymic = "Patronimic";
+        private static int _countFIOs = 0;
         
-        private static List<string> CreateFirstNamesFemale() =>
-        new()
-        {
-            Aleksandra,
-            Alla,
-            Anastasia,
-            Anna,
-            Alina,
-            Alissa,
-            Ekaterina,
-            Elizabeth,
-            Kristina,
-            Margarita,
-            Karina,
-            Maria,
-            Irina,
-            Oksana,
-            Nina,
-            Polina,
-            Rosa,
-            Snezhana,
-            Susan,
-            Vera
-        };
 
-        private static List<string> CreateLastNames() =>
-        new()
+        public static void GetFIOs(out IReadOnlyDictionary<int, IReadOnlyDictionary<string, string>> FIOs)
         {
-            Tolstov,
-            Arkanov,
-            Harlamov,
-            Borisov,
-            Savin,
-            Fadeyev,
-            Kozlov,
-            Orehov,
-            Chaikin,
-            Glebov,
-            Lysenko,
-            Agunin,
-            Smirnov,
-            Kotov,
-            Prohorov,
-            Filimonov,
-            Leontyev,
-            Haritonov,
-            Sviridov,
-            Parfyonov,
-            Goldberg,
-            Kharlamov,
-            Pavlov,
-            Teterin,
-            Trafinov,
-            Akhmedov,
-            Ilyin,
-            Zubkov,
-            Peredelkin,
-            Tkachuk,
-            Shmidt,
-            Golubev,
-            Vavilov,
-            Gogolev,
-            Dorohov,
-            Dedov,
-            Demin,
-            Zharov,
-            Zorin,
-            Kuzmin,
-            Vlasov
-        };
+            FIOs = FIOsData ?? SetFIOs();
+        }
 
-        private static List<string> CreatePatronymics() =>
-        new()
+        private static IReadOnlyDictionary<int, IReadOnlyDictionary<string, string>> SetFIOs()
         {
-            Aleksandrov,
-            Alekseyev,
-            Anatolyev,
-            Andreyev,
-            Antonov,
-            Denisov,
-            Dmitriye,
-            Ernestov,
-            Evgenyev,
-            Fedorov,
-            Filippov,
-            Gennadyev,
-            Georgiyev,
-            Igorev,
-            Innokentyev,
-            Ivanov,
-            Karpov,
-            Kirillov,
-            Konstantinov,
-            Leonidov,
-            Leybov,
-            Maksimov,
-            Maratov,
-            Mironov,
-            Nikolayev,
-            Olegov,
-            Petrov,
-            Platonov,
-            Rodionov,
-            Ruslanov,
-            Rustamov,
-            Safronov,
-            Sergeyev,
-            Stanislavov,
-            Timofeyev,
-            Vasilyev,
-            Viktorov,
-            Yuryev
-        };
+            SetFIOsMale(out IReadOnlyDictionary<int, IReadOnlyDictionary<string, string>> males);
+            SetFIOsFemale(out IReadOnlyDictionary<int, IReadOnlyDictionary<string, string>> females);
+            return females.Concat(males).ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        private static void SetFIOsMale(out IReadOnlyDictionary<int, IReadOnlyDictionary<string, string>> males)
+        {
+            IReadOnlyList<string> lastNames = LastNames;
+            IReadOnlyList<string> firstNames = FirstNamesMale;
+            IReadOnlyList<string> patronymics = Patronymics.Select(patronymic => string.Format(EndingFormat, patronymic, EndingIch)).ToList();
+            GenerateFIO(lastNames, firstNames, patronymics, out Dictionary<int, IReadOnlyDictionary<string, string>> FIOs);
+            males = FIOs;
+        }
+
+        private static void SetFIOsFemale(out IReadOnlyDictionary<int, IReadOnlyDictionary<string, string>> females)
+        {
+            IReadOnlyList<string> lastNames = LastNames.Select(lastNames => string.Format(EndingFormat, lastNames, EndingA)).ToList();
+            IReadOnlyList<string> firstNames = FirstNamesFemale;
+            IReadOnlyList<string> patronymics = Patronymics.Select(patronymic => string.Format(EndingFormat, patronymic, EndingNa)).ToList();
+            GenerateFIO(lastNames, firstNames, patronymics, out Dictionary<int, IReadOnlyDictionary<string, string>> FIOs);
+            females = FIOs;
+        }
+
+        private static void GenerateFIO(IReadOnlyList<string> lastNames, IReadOnlyList<string> firstNames, IReadOnlyList<string> patronymics, out Dictionary<int, IReadOnlyDictionary<string, string>> FIOs)
+        {
+            FIOs =
+            (
+                from lastName in lastNames
+                from firstName in firstNames
+                from patronymic in patronymics
+                select CreateDictionaryFIO(lastName, firstName, patronymic)
+            ).ToDictionary(_ => _countFIOs++);
+        }
+
+        private static IReadOnlyDictionary<string, string> CreateDictionaryFIO(string lastName, string firstName, string patronymic)
+        {
+            return new Dictionary<string, string>
+            {
+                { LastName, lastName },
+                { FirstName, firstName },
+                { Patronymic, patronymic }
+            };
+        }
     }
 }

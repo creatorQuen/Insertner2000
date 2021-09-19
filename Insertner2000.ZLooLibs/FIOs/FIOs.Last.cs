@@ -1,4 +1,6 @@
-﻿namespace Insertner2000.ZLooLibs
+﻿using System.Collections.Generic;
+
+namespace Insertner2000.ZLooLibs
 {
     public partial struct FIOs
     {
@@ -43,5 +45,51 @@
         private const string Zorin = "Zorin";
         private const string Kuzmin = "Kuzmin";
         private const string Vlasov = "Vlasov";
+
+        private static List<string> CreateLastNames() =>
+        new()
+        {
+            Tolstov,
+            Arkanov,
+            Harlamov,
+            Borisov,
+            Savin,
+            Fadeyev,
+            Kozlov,
+            Orehov,
+            Chaikin,
+            Glebov,
+            Lysenko,
+            Agunin,
+            Smirnov,
+            Kotov,
+            Prohorov,
+            Filimonov,
+            Leontyev,
+            Haritonov,
+            Sviridov,
+            Parfyonov,
+            Goldberg,
+            Kharlamov,
+            Pavlov,
+            Teterin,
+            Trafinov,
+            Akhmedov,
+            Ilyin,
+            Zubkov,
+            Peredelkin,
+            Tkachuk,
+            Shmidt,
+            Golubev,
+            Vavilov,
+            Gogolev,
+            Dorohov,
+            Dedov,
+            Demin,
+            Zharov,
+            Zorin,
+            Kuzmin,
+            Vlasov
+        };
     }
 }

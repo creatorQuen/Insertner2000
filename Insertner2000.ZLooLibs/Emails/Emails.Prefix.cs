@@ -1,4 +1,6 @@
-﻿namespace Insertner2000.ZLooLibs
+﻿using System.Collections.Generic;
+
+namespace Insertner2000.ZLooLibs
 {
     public partial struct Emails
     {
@@ -18,5 +20,26 @@
         private const string Msgos = "msgos";
         private const string Trbvm = "trbvm";
         private const string Spam = "spam";
+        
+        private static List<string> CreatePrefixs() =>
+        new()
+        {
+            Gmail,
+            Yandex,
+            Mail,
+            Rambler,
+            Yahoo,
+            Yopmail,
+            Courriel,
+            Mega,
+            Speed,
+            Spamfree24,
+            Spam4,
+            Spamgourmet,
+            Unmail,
+            Msgos,
+            Trbvm,
+            Spam
+        };
     }
 }

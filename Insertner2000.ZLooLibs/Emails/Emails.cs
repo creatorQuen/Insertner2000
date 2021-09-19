@@ -28,47 +28,5 @@ namespace Insertner2000.ZLooLibs
 
             return emails;
         }
-
-        private static List<string> CreateDomains() =>
-        new()
-        {
-            Com,
-            Ru,
-            Uk,
-            Az,
-            Org,
-            Biz,
-            Nf,
-            Fr,
-            De,
-            Dj,
-            Cx,
-            Net,
-            Me,
-            Info,
-            Co,
-            La
-        };
-
-        private static List<string> CreatePrefixs() =>
-        new()
-        {
-            Gmail,
-            Yandex,
-            Mail,
-            Rambler,
-            Yahoo,
-            Yopmail,
-            Courriel,
-            Mega,
-            Speed,
-            Spamfree24,
-            Spam4,
-            Spamgourmet,
-            Unmail,
-            Msgos,
-            Trbvm,
-            Spam
-        };
     }
 }

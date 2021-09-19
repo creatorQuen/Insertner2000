@@ -1,4 +1,6 @@
-﻿namespace Insertner2000.ZLooLibs
+﻿using System.Collections.Generic;
+
+namespace Insertner2000.ZLooLibs
 {
     public partial struct FIOs
     {
@@ -42,5 +44,55 @@
         private const string Valentin = "Valentin";
         private const string Vladimir = "Vladimir";
         private const string Viktor = "Viktor";
+
+        private static List<string> CreateFirstNamesMale() =>
+        new()
+        {
+            Aleksandr,
+            Alexsey,
+            Anton,
+            Andrey,
+            Artem,
+            Artur,
+            Boris,
+            Brown,
+            Evgeniy,
+            Maksim,
+            Kirill,
+            Sergey,
+            Peter,
+            Stanislav,
+            Stefan,
+            Timur,
+            Vadim,
+            Valentin,
+            Vladimir,
+            Viktor
+        };
+
+        private static List<string> CreateFirstNamesFemale() =>
+        new()
+        {
+            Aleksandra,
+            Alla,
+            Anastasia,
+            Anna,
+            Alina,
+            Alissa,
+            Ekaterina,
+            Elizabeth,
+            Kristina,
+            Margarita,
+            Karina,
+            Maria,
+            Irina,
+            Oksana,
+            Nina,
+            Polina,
+            Rosa,
+            Snezhana,
+            Susan,
+            Vera
+        };
     }
 }

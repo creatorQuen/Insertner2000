@@ -12,22 +12,5 @@ namespace Insertner2000.ZLooLibs
             currenciesType = CurrenciesType;
             transactionsType = TransactionsType;
         }
-
-        private static List<string> GetCurrenciesType() =>
-        new()
-        {
-            Rub,
-            Usd,
-            Eur,
-            Jpy
-        };
-
-        private static List<string> GetTransactionsType() =>
-        new()
-        {
-            Deposit,
-            Withdraw,
-            Transfer
-        };
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Insertner2000.ZLooLibs
+﻿using System.Collections.Generic;
+
+namespace Insertner2000.ZLooLibs
 {
     public partial struct Emails
     {
@@ -18,5 +20,26 @@
         private const string Info = "info";
         private const string Co = "co";
         private const string La = "la";
+
+        private static List<string> CreateDomains() =>
+        new()
+        {
+            Com,
+            Ru,
+            Uk,
+            Az,
+            Org,
+            Biz,
+            Nf,
+            Fr,
+            De,
+            Dj,
+            Cx,
+            Net,
+            Me,
+            Info,
+            Co,
+            La
+        };
     }
 }

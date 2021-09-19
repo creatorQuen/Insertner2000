@@ -7,10 +7,10 @@ namespace Insertner2000.Tables
 {
     public class City
     {
-        private string _nameTable = "City";
+        private const string _nameTable = "City";
 
-        public void CreateCities(int countStart, string connectionString)
-        {
+            public void CreateCities(int countStart, string connectionString)
+            {
             using (SqlConnection _connection = new SqlConnection(connectionString))
             {
                 Console.WriteLine("Starting..");
