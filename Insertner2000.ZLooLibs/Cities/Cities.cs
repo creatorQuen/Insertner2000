@@ -4,11 +4,11 @@ namespace Insertner2000.ZLooLibs
 {
     public partial struct Cities
     {
-        private static readonly List<string> CitiesList = CreateCities();
+        private static readonly List<string>? CitiesList = CreateCities();
 
         public static void GetCities(out IReadOnlyList<string> cities)
         {
-            cities = CitiesList;
+             cities = CitiesList ?? CreateCities();
         }
 
         private static List<string> CreateCities() =>

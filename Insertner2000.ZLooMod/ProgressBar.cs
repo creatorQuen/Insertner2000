@@ -2,85 +2,88 @@
 using System.Text;
 using System.Threading;
 
-public class ProgressBar : IDisposable, IProgress<double>
+namespace Insertner2000.ZLooMod
 {
-	private int _blockCount;
-	private readonly TimeSpan animationInterval = TimeSpan.FromSeconds(1.0 / 8);
-	private const string animation = @"|/-\";
+    public class ProgressBar : IDisposable, IProgress<double>
+    {
+        private readonly int _blockCount;
+        private readonly TimeSpan _animationInterval = TimeSpan.FromSeconds(1.0 / 8);
+        private const string Animation = @"|/-\";
 
-	private readonly Timer timer;
+        private readonly Timer _timer;
 
-	private double currentProgress = 0;
-	private string currentText = string.Empty;
-	private bool disposed = false;
-	private int animationIndex = 0;
+        private double _currentProgress = 0;
+        private string _currentText = string.Empty;
+        private bool _disposed = false;
+        private int _animationIndex = 0;
 
-	public ProgressBar(int blockCount = 50)
-	{
-		_blockCount = blockCount;
-		timer = new Timer(TimerHandler);
-		if (!Console.IsOutputRedirected) { ResetTimer(); }
-	}
+        public ProgressBar(int blockCount = 50)
+        {
+            _blockCount = blockCount;
+            _timer = new Timer(TimerHandler);
+            if (!Console.IsOutputRedirected) { ResetTimer(); }
+        }
 
-	public void Report(double value)
-	{
-		value = Math.Max(0, Math.Min(1, value));
-		Interlocked.Exchange(ref currentProgress, value);
-	}
+        public void Report(double value)
+        {
+            value = Math.Max(0, Math.Min(1, value));
+            Interlocked.Exchange(ref _currentProgress, value);
+        }
 
-	private void TimerHandler(object state)
-	{
-		lock (timer)
-		{
-			if (disposed) return;
+        private void TimerHandler(object state)
+        {
+            lock (_timer)
+            {
+                if (_disposed) return;
 
-			var progressBlockCount = (int)(currentProgress * _blockCount);
-			var percent = (int)(currentProgress * 100);
-			var text = string.Format("[{0}{1}] {2,3}% {3}",
-				new string('#', progressBlockCount), new string('-', _blockCount - progressBlockCount),
-				percent,
-				animation[animationIndex++ % animation.Length]);
-			UpdateText(text);
+                var progressBlockCount = (int)(_currentProgress * _blockCount);
+                var percent = (int)(_currentProgress * 100);
+                var text = string.Format("[{0}{1}] {2,3}% {3}",
+                    new string('#', progressBlockCount), new string('-', _blockCount - progressBlockCount),
+                    percent,
+                    Animation[_animationIndex++ % Animation.Length]);
+                UpdateText(text);
 
-			ResetTimer();
-		}
-	}
+                ResetTimer();
+            }
+        }
 
-	private void UpdateText(string text)
-	{
-		var commonPrefixLength = 0;
-		var commonLength = Math.Min(currentText.Length, text.Length);
-		while (commonPrefixLength < commonLength && text[commonPrefixLength] == currentText[commonPrefixLength])
-		{
-			commonPrefixLength++;
-		}
+        private void UpdateText(string text)
+        {
+            var commonPrefixLength = 0;
+            var commonLength = Math.Min(_currentText.Length, text.Length);
+            while (commonPrefixLength < commonLength && text[commonPrefixLength] == _currentText[commonPrefixLength])
+            {
+                commonPrefixLength++;
+            }
 
-		var outputBuilder = new StringBuilder();
-		outputBuilder.Append('\b', currentText.Length - commonPrefixLength);
-		outputBuilder.Append(text.Substring(commonPrefixLength));
+            var outputBuilder = new StringBuilder();
+            outputBuilder.Append('\b', _currentText.Length - commonPrefixLength);
+            outputBuilder.Append(text[commonPrefixLength..]);
 
-		var overlapCount = currentText.Length - text.Length;
-		if (overlapCount > 0)
-		{
-			outputBuilder.Append(' ', overlapCount);
-			outputBuilder.Append('\b', overlapCount);
-		}
+            var overlapCount = _currentText.Length - text.Length;
+            if (overlapCount > 0)
+            {
+                outputBuilder.Append(' ', overlapCount);
+                outputBuilder.Append('\b', overlapCount);
+            }
 
-		Console.Write(outputBuilder);
-		currentText = text;
-	}
+            Console.Write(outputBuilder);
+            _currentText = text;
+        }
 
-	private void ResetTimer()
-	{
-		timer.Change(animationInterval, TimeSpan.FromMilliseconds(-1));
-	}
+        private void ResetTimer()
+        {
+            _timer.Change(_animationInterval, TimeSpan.FromMilliseconds(-1));
+        }
 
-	public void Dispose()
-	{
-		lock (timer)
-		{
-			disposed = true;
-			UpdateText(string.Empty);
-		}
-	}
+        public void Dispose()
+        {
+            lock (_timer)
+            {
+                _disposed = true;
+                UpdateText(string.Empty);
+            }
+        }
+    }
 }

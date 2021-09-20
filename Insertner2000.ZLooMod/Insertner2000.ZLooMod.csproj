@@ -11,4 +11,8 @@
     <ProjectReference Include="..\Insertner2000.ZLooLibs\Insertner2000.ZLooLibs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
 </Project>

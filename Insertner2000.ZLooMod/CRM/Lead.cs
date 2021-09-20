@@ -12,7 +12,7 @@ namespace Insertner2000.ZLooMod
         private const string FirstName = "FirstName";
         private const string Patronymic = "Patronimic";
 
-        public void CreateTable()
+        public void CreateTableLeads()
         {
             int countStart = 0;
             int countEnd = 1000;
@@ -53,9 +53,6 @@ namespace Insertner2000.ZLooMod
                     FIOsData[idFIO][Patronymic]
                 );
             }
-
-
-            
         }
     }
 }
