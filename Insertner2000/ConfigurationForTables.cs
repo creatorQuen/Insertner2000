@@ -15,16 +15,11 @@ namespace Insertner2000
         //public const string AccountTable = "[LeadA].[dbo].[Account]";
         //public const string TransactionTable = "[TStore].[dbo].[Transaction]";
 
-        private const string _conStringCrm = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=CRM.DB; Persist Security Info=False;";
-        private const string _conStringTStore = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TransactionStore.DB; Persist Security Info=False;";
-        //private const string _conStringTStore = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TransactionStore; Persist Security Info=False;";
-        //private const string _conStringCrm = @"Data Source=80.78.240.16;Initial Catalog = CRM.Db; Persist Security Info=True;User ID = student;Password=qwe!23;";
+        private const string _conStringCrm = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LeadA; Persist Security Info=False;";
+        private const string _conStringTStore = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TStore; Persist Security Info=False;";
 
-        //private const string _conStringCrm = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LeadA; Persist Security Info=False;";
-        //private const string _conStringTStore = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TStore; Persist Security Info=False;";
-
-        private const int _startCountRows = 1;
-        private const int _endCountRows = 100;
+        private const int _startCountRows = 600_001;
+        private const int _endCountRows = 900_000;
 
         public void LeadsDataBase()
         {

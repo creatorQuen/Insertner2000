@@ -76,6 +76,8 @@ namespace Insertner2000.Tables
                     var cityId = _random.Next(1, countCity + 1);
                     var boolId = _random.Next(0, 2);
                     
+                    var birtday = birthDay.AddDays(numberForBirthDay);
+
                     table.Rows.Add(
                         intRow,
                         (FirstName)tmpFirstName,
@@ -88,10 +90,10 @@ namespace Insertner2000.Tables
                         roleId,
                         cityId,
                         boolId,
-                        birthDay.AddDays(numberForBirthDay),
-                        1,
-                        1,
-                        1
+                        birtday,
+                        birtday.Year,
+                        birtday.Month,
+                        birtday.Day
                         );
                 }
 
